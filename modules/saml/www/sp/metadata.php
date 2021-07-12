@@ -258,13 +258,13 @@ $metaArray20['entityid'] = $entityId;
 if ($spconfig->hasValue('maxCache')) {
     $maxCache = $spconfig->getInteger('maxCache');
 } else {
-    $maxCache = NULL;
+    $maxCache = null;
 }
 
 if ($spconfig->hasValue('maxDuration')) {
     $maxDuration = $spconfig->getInteger('maxDuration');
 } else {
-    $maxDuration = NULL;
+    $maxDuration = null;
 }
 
 $metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($entityId, $maxCache, $maxDuration);
