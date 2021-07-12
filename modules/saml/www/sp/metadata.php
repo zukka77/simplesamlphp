@@ -255,7 +255,19 @@ if ($spconfig->hasValue('redirect.sign')) {
 $metaArray20['metadata-set'] = 'saml20-sp-remote';
 $metaArray20['entityid'] = $entityId;
 
-$metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($entityId);
+if ($spconfig->hasValue('maxCache')) {
+    $maxCache = $spconfig->getInteger('maxCache');
+} else {
+    $maxCache = NULL;
+}
+
+if ($spconfig->hasValue('maxDuration')) {
+    $maxDuration = $spconfig->getInteger('maxDuration');
+} else {
+    $maxDuration = NULL;
+}
+
+$metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($entityId, $maxCache, $maxDuration);
 $metaBuilder->addMetadataSP20($metaArray20, $supported_protocols);
 $metaBuilder->addOrganizationInfo($metaArray20);
 

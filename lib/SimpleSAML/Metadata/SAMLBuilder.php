@@ -524,6 +524,8 @@ class SAMLBuilder
         assert(isset($metadata['entityid']));
         assert(isset($metadata['metadata-set']));
 
+        $this->setExpiration($metadata);
+
         $metadata = Configuration::loadFromArray($metadata, $metadata['entityid']);
 
         $e = new SPSSODescriptor();
