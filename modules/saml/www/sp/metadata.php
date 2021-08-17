@@ -256,18 +256,14 @@ $metaArray20['metadata-set'] = 'saml20-sp-remote';
 $metaArray20['entityid'] = $entityId;
 
 if ($spconfig->hasValue('maxCache')) {
-    $maxCache = $spconfig->getInteger('maxCache');
-} else {
-    $maxCache = null;
+    $metaArray20['maxCache'] = $spconfig->getInteger('maxCache');
 }
 
 if ($spconfig->hasValue('maxDuration')) {
-    $maxDuration = $spconfig->getInteger('maxDuration');
-} else {
-    $maxDuration = null;
+    $metaArray20['maxDuration'] = $spconfig->getInteger('maxDuration');
 }
 
-$metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($entityId, $maxCache, $maxDuration);
+$metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($entityId, $metaArray20['maxCache'] ?? null, $metaArray20['maxDuration'] ?? null);
 $metaBuilder->addMetadataSP20($metaArray20, $supported_protocols);
 $metaBuilder->addOrganizationInfo($metaArray20);
 
