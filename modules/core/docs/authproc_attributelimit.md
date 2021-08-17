@@ -8,6 +8,10 @@ metadata. The configuration is a list of attributes that should be allowed. In c
 release some specific values, make the name of the attribute the key of the array, and its value an array with all the
 different values allowed for it.
 
+You may need to send special bilateral, or local attributes to a set of SPs that are not specified in SP's metadata. 
+In this case you can list the SPs then add the name of the attributes to send these SPs, or you can list the attributes and then specify the SPs to send them.
+Find the examples below.
+
 Examples
 --------
 
@@ -15,114 +19,133 @@ Here you will find a few examples on how to use this simple module:
 
 Limit to the `cn` and `mail` attribute:
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
             'cn', 'mail'
-        ),
-    ),
+        ],
+    ],
 
 Allow `eduPersonTargetedID` and `eduPersonAffiliation` by default, but allow the metadata to override the limitation.
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
-	        'default' => TRUE,
+            'default' => true,
             'eduPersonTargetedID', 'eduPersonAffiliation',
-        ),
-    ),
+        ],
+    ],
 
 Only allow specific values for an attribute.
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
             'eduPersonEntitlement' => array('urn:x-surfnet:surf.nl:surfdrive:quota:100')
-        ),
-    ),
+        ],
+    ],
 
 Only allow specific values for an attribute ignoring case.
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
-            'eduPersonEntitlement' => array(
+            'eduPersonEntitlement' => [
                 'ignoreCase' => true,
                 'URN:x-surfnet:surf.nl:SURFDRIVE:quota:100'
-             )
-        ),
-    ),
+             ],
+        ],
+    ],
     
 Only allow specific values for an attribute that match a regex pattern
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
-            'eduPersonEntitlement' => array(
+            'eduPersonEntitlement' => [
                 'regex' => true,
                 '/^urn:x-surfnet:surf/',
                 '/^urn:x-IGNORE_Case/i',
-            )
-        ),
-    ),
+            ],
+        ],
+    ],
     
     
 Don't allow any attributes by default, but allow the metadata to override it.
 
-    'authproc' => array(
-        50 => array(
+    'authproc' => [
+        50 => [
             'class' => 'core:AttributeLimit',
-	        'default' => TRUE,
-        ),
-    ),
+            'default' => true,
+        ],
+    ],
 
 In order to just use the list of attributes defined in the metadata for each service provider, configure the module
 like this:
 
-    'authproc' => array(
+    'authproc' => [
         50 => 'core:AttributeLimit',
-    ),
+    ],
 
 Then, add the allowed attributes to each service provider metadata, in the `attributes` option:
 
-    $metadata['https://saml2sp.example.org'] = array(
+    $metadata['https://saml2sp.example.org'] = [
         'AssertionConsumerService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
         'SingleLogoutService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp',
         ...
-        'attributes' => array('cn', 'mail'),
+        'attributes' => ['cn', 'mail'],
         ...
-    );
+    ];
 
 Now, let's look to a couple of examples on how to filter out attribute values. First, allow only the entitlements known
 to be used by a service provider (among other attributes):
 
-    $metadata['https://saml2sp.example.org'] = array(
+    $metadata['https://saml2sp.example.org'] = [
         'AssertionConsumerService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
         'SingleLogoutService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp',
         ...
-        'attributes' => array(
+        'attributes' => [
             'uid',
             'mail',
-            'eduPersonEntitlement' => array(
+            'eduPersonEntitlement' => [
                 'urn:mace:example.org:admin',
                 'urn:mace:example.org:user',
-            ),
-        ),
+            ],
+        ],
         ...
-    );
+    ];
 
 Now, an example on how to normalize the affiliations sent from an identity provider, to make sure that no custom
 values ever reach the service providers. Bear in mind that this configuration can be overridden by metadata:
 
-    'authproc' => array(
+    'authproc' => [
         50 => 'core:AttributeLimit',
-        'default' => TRUE,
-        'eduPersonAffiliation' => array(
+        'default' => true,
+        'eduPersonAffiliation' => [
             'student',
             'staff',
             'member',
             'faculty',
             'employee',
             'affiliate',
-        ),
-    ),
+        ],
+    ],
+
+Send attributes to an SP that are not specified in the SPs metadata.
+
+    'authproc' => [
+        50 => 'core:AttributeLimit',
+        'allowedAttributes' => [],
+        'bilateralSPs' => [
+            'entityid1' => [
+                'mail',
+                'local-mail'
+            ],
+        ],
+        'bilateralAttributes' => [
+            'localFooId' => [
+                'entityid1',
+                'entityid2'
+            ],
+        ],
+    ],
