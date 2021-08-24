@@ -260,11 +260,11 @@ Options
 
 :   *Note*: SAML 2 specific.
 
-`maxCache`
-:   maxCache allows you to set the `validUntil` in the SP's metadata. It's an integer representing the amount of seconds.
+`validUntil`
+:   validUntil allows you to set the `validUntil` in the SP's metadata. It's an integer representing the amount of seconds since current time.
 
-`maxDuration`
-:   maxDuration allows you to set the `cacheDuration` in the SP's metadata. It's an integer representing the amount of seconds.
+`cacheDuration`
+:   cacheDuration allows you to set the `cacheDuration` in the SP's metadata. It's an integer representing the amount of seconds.
 
 `name`
 :   The name of this SP.
