@@ -67,9 +67,9 @@ class SAMLBuilder
      * Initialize the SAML builder.
      *
      * @param string   $entityId The entity id of the entity.
-     * @param int|null $validUntil The maximum time in seconds the metadata should be cached. Defaults to null
-     * @param int|null $cacheDuration The maximum time in seconds this metadata should be considered valid. Defaults
+     * @param int|null $validUntil The maximum time in seconds this metadata should be considered valid. Defaults
      * to null.
+     * @param int|null $cacheDuration The maximum time in seconds the metadata should be cached. Defaults to null
      * @return void
      */
     public function __construct($entityId, $validUntil = null, $cacheDuration = null)
