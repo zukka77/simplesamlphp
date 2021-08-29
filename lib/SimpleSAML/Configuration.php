@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
+use SimpleSAML\Logger\BasicLogger;
 use SimpleSAML\Utils;
 
 /**
@@ -109,9 +110,12 @@ class Configuration implements Utils\ClearableState
         $config = self::getInstance();
 
         // Pull the logger from the configuration
-        $logger = $config->getValue('logger');
+        $logger = $config->getValue('logger', null);
+        Assert::nullOrImplementsInterface($logger, LoggerInterface::class);
 
-        Assert::implementsInterface($logger, LoggerInterface::class);
+        if ($logger === null) {
+            $logger = new BasicLogger();
+        }
 
         self::$logger = $logger;
         return self::$logger;

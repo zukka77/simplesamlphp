@@ -25,6 +25,7 @@ trait LoggerAwareTrait
      */
     public function getLogger(): LoggerInterface
     {
+        /** @psalm-var \Psr\Log\LoggerInterface $this->logger */
         if (isset($this->logger)) {
             return $this->logger;
         }
