@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML;
 
+use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
@@ -76,6 +77,12 @@ class Configuration implements Utils\ClearableState
     private ?string $filename = null;
 
     /**
+     * @var \Psr\Log\LoggerInterface|null
+     */
+    private static ?LoggerInterface $logger = null;
+
+
+    /**
      * Initializes a configuration from the given array.
      *
      * @param array $config The configuration array.
@@ -85,6 +92,29 @@ class Configuration implements Utils\ClearableState
     {
         $this->configuration = $config;
         $this->location = $location;
+    }
+
+
+    /**
+     * Retrieves the current logger instance. Will create a new one if there isn't any
+     *
+     * @return \Psr\Log\LoggerInterface The logger instance
+     */
+    public static function getLogger(): LoggerInterface
+    {
+        if (self::$logger !== null) {
+            return self::$logger;
+        }
+
+        $config = self::getInstance();
+
+        // Pull the logger from the configuration
+        $logger = $config->getValue('logger');
+
+        Assert::implementsInterface($logger, LoggerInterface::class);
+
+        self::$logger = $logger;
+        return self::$logger;
     }
 
 
@@ -164,7 +194,7 @@ class Configuration implements Utils\ClearableState
         self::$loadedConfigs[$filename] = $cfg;
 
         if ($spurious_output) {
-            $logger = Logger::getInstance();
+            $logger = self::getLogger();
             $logger->warning(
                 "The configuration file '$filename' generates output. Please review your configuration."
             );
