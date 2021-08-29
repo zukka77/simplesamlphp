@@ -23,6 +23,13 @@ use SimpleSAML\Logger\SyslogLoggingHandler;
 class Logger extends AbstractLogger
 {
     /**
+     * Associative array with mappings from instance-names to logger objects.
+     *
+     * @var \SimpleSAML\Logger|null
+     */
+    private static ?Logger $instance = null;
+
+    /**
      * @var \SimpleSAML\Logger\LoggingHandlerInterface|null
      */
     private static ?LoggingHandlerInterface $loggingHandler = null;
@@ -142,6 +149,30 @@ class Logger extends AbstractLogger
         LogLevel::INFO,
         LogLevel::DEBUG,
     ];
+
+
+    /**
+     * Private constructor that restricts instantiation to getInstance().
+     */
+    private function __construct()
+    {
+    }
+
+
+    /**
+     * Retrieves the current logger instance. Will create a new one if there isn't any
+     *
+     * @return \SimpleSAML\Logger The logger instance
+     */
+    public static function getInstance(): Logger
+    {
+        if (self::$instance !== null) {
+            return self::$instance;
+        }
+
+        return new self();
+    }
+
 
     /**
      * Statistics.
