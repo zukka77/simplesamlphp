@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use SAML2\Compat\AbstractContainer;
 use SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\Logger;
 use SimpleSAML\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
 
