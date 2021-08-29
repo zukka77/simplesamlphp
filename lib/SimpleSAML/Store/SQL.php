@@ -6,9 +6,10 @@ namespace SimpleSAML\Store;
 
 use PDO;
 use PDOException;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Store;
 
 /**
@@ -16,8 +17,10 @@ use SimpleSAML\Store;
  *
  * @package SimpleSAMLphp
  */
-class SQL extends Store
+class SQL extends Store implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The PDO object for our database.
      *
@@ -46,9 +49,6 @@ class SQL extends Store
      */
     private array $tableVersions;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * Initialize the SQL data store.
@@ -56,7 +56,7 @@ class SQL extends Store
     public function __construct()
     {
         $config = Configuration::getInstance();
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
 
         $dsn = $config->getString('store.sql.dsn');
         $username = $config->getString('store.sql.username', null);

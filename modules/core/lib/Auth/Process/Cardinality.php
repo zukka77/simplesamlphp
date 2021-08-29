@@ -7,7 +7,6 @@ namespace SimpleSAML\Module\core\Auth\Process;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
@@ -27,9 +26,6 @@ class Cardinality extends Auth\ProcessingFilter
     /** @var \SimpleSAML\Utils\HTTP */
     private Utils\HTTP $httpUtils;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * Initialize this filter, parse configuration.
@@ -43,7 +39,6 @@ class Cardinality extends Auth\ProcessingFilter
     {
         parent::__construct($config, $reserved);
 
-        $this->logger = Logger::getInstance();
         $this->httpUtils = $httpUtils ?: new Utils\HTTP();
 
         foreach ($config as $attribute => $rules) {

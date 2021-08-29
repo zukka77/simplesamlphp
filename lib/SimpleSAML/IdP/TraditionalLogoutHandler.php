@@ -5,30 +5,29 @@ declare(strict_types=1);
 namespace SimpleSAML\IdP;
 
 use Exception;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
 use SimpleSAML\Error;
 use SimpleSAML\IdP;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Utils;
 
 /**
  * Class that handles traditional logout.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/simplesamlphp
  */
-
-class TraditionalLogoutHandler implements LogoutHandlerInterface
+class TraditionalLogoutHandler implements LogoutHandlerInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The IdP we are logging out from.
      *
      * @var \SimpleSAML\IdP
      */
     private IDP $idp;
-
-    /** \SimpleSAML\Logger */
-    private Logger $logger;
 
 
     /**
@@ -39,7 +38,7 @@ class TraditionalLogoutHandler implements LogoutHandlerInterface
     public function __construct(IdP $idp)
     {
         $this->idp = $idp;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
     }
 
 

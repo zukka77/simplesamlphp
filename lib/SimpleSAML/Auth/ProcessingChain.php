@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Auth;
 
 use Exception;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
@@ -22,8 +23,10 @@ use SimpleSAML\Utils;
  * @package SimpleSAMLphp
  */
 
-class ProcessingChain
+class ProcessingChain implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The list of remaining filters which should be applied to the state.
      */
@@ -59,6 +62,7 @@ class ProcessingChain
      */
     public function __construct(array $idpMetadata, array $spMetadata, string $mode = 'idp')
     {
+        $this->logger = $this->getLogger();
         $config = Configuration::getInstance();
         $configauthproc = $config->getArray('authproc.' . $mode, null);
 
@@ -77,8 +81,7 @@ class ProcessingChain
             self::addFilters($this->filters, $spFilters);
         }
 
-        $logger = Logger::getInstance();
-        $logger->debug(
+        $this->logger->debug(
             sprintf(
                 'Filter config for %s -> %s: %s',
                 $idpMetadata['entityid'],
@@ -164,8 +167,10 @@ class ProcessingChain
         $config['%priority'] = $priority;
         unset($config['class']);
 
-        /** @var \SimpleSAML\Auth\ProcessingFilter */
-        return new $className($config, null);
+        /** @var \SimpleSAML\Auth\ProcessingFilter $filter */
+        $filter = new $className($config, null);
+
+        return $filter;
     }
 
 

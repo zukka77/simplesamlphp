@@ -36,7 +36,7 @@ use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\shibmd\Scope;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\Logger;
+use SimpleSAML\Configuration;
 use SimpleSAML\Utils;
 
 /**
@@ -904,7 +904,7 @@ class SAMLParser
             $ret['RegistrationInfo'] = $parentExtensions['RegistrationInfo'];
         }
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         foreach ($element->getExtensions() as $e) {
             if ($e instanceof Scope) {
                 $ret['scope'][] = $e->getScope();
@@ -1328,7 +1328,7 @@ class SAMLParser
                 }
             }
         }
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->debug('Could not validate signature');
         return false;
     }

@@ -1,24 +1,30 @@
 <?php
 
+use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
+use SimpleSAML\Error;
+use SimpleSAML\IdP;
+use SimpleSAML\Stats;
+
 if (!isset($_REQUEST['id'])) {
-    throw new \SimpleSAML\Error\BadRequest('Missing required parameter: id');
+    throw new Error\BadRequest('Missing required parameter: id');
 }
 
 /** @psalm-var array $state */
-$state = \SimpleSAML\Auth\State::loadState($_REQUEST['id'], 'core:Logout-IFrame');
-$idp = \SimpleSAML\IdP::getByState($state);
+$state = Auth\State::loadState($_REQUEST['id'], 'core:Logout-IFrame');
+$idp = IdP::getByState($state);
 
 $associations = $idp->getAssociations();
 
-$logger = \SimpleSAML\Logger::getInstance();
+$logger = Configuration::getInstance()::getLogger();
 if (!isset($_REQUEST['cancel'])) {
     $logger->stats('slo-iframe done');
-    \SimpleSAML\Stats::log('core:idp:logout-iframe:page', ['type' => 'done']);
+    Stats::log('core:idp:logout-iframe:page', ['type' => 'done']);
     $SPs = $state['core:Logout-IFrame:Associations'];
 } else {
     // user skipped global logout
     $logger->stats('slo-iframe skip');
-    \SimpleSAML\Stats::log('core:idp:logout-iframe:page', ['type' => 'skip']);
+    Stats::log('core:idp:logout-iframe:page', ['type' => 'skip']);
     $SPs = []; // no SPs should have been logged out
     $state['core:Failed'] = true; // mark as partial logout
 }
@@ -52,7 +58,7 @@ foreach ($SPs as $assocId => $sp) {
             $spId = $assocId;
         }
         $logger->stats('slo-iframe-fail ' . $spId);
-        \SimpleSAML\Stats::log('core:idp:logout-iframe:spfail', ['sp' => $spId]);
+        Stats::log('core:idp:logout-iframe:spfail', ['sp' => $spId]);
         $state['core:Failed'] = true;
     }
 }

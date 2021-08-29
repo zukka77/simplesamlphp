@@ -250,7 +250,7 @@ class Module
             throw new Error\NotFound('Directory listing not available.');
         }
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         if (!file_exists($path)) {
             // file not found
             $logger->info('Could not find file \'' . $path . '\'.');

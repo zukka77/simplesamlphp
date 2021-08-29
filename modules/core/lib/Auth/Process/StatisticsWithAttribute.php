@@ -7,7 +7,6 @@ namespace SimpleSAML\Module\core\Auth\Process;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
-use SimpleSAML\Logger;
 
 /**
  * Log a line in the STAT log with one attribute.
@@ -28,9 +27,6 @@ class StatisticsWithAttribute extends Auth\ProcessingFilter
     /** @var bool */
     private bool $skipPassive = false;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * Initialize this filter.
@@ -41,7 +37,6 @@ class StatisticsWithAttribute extends Auth\ProcessingFilter
     public function __construct(array &$config, $reserved)
     {
         parent::__construct($config, $reserved);
-        $this->logger = Logger::getInstance();
 
         if (array_key_exists('attributename', $config)) {
             $this->attribute = $config['attributename'];

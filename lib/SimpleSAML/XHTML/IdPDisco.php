@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\XHTML;
 
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
@@ -21,8 +22,10 @@ use SimpleSAML\Utils;
  * @package SimpleSAMLphp
  */
 
-class IdPDisco
+class IdPDisco implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * An instance of the configuration class.
      *
@@ -50,11 +53,6 @@ class IdPDisco
      * @var \SimpleSAML\Session
      */
     protected Session $session;
-
-    /**
-     * @var \SimpleSAML\Logger
-     */
-    protected Logger $logger;
 
     /**
      * The metadata sets we find allowed entities in, in prioritized order.
@@ -124,7 +122,7 @@ class IdPDisco
     {
         // initialize standard classes
         $this->config = Configuration::getInstance();
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         $this->metadata = MetaDataStorageHandler::getMetadataHandler();
         $this->session = Session::getSessionFromRequest();
         $this->instance = $instance;

@@ -32,7 +32,6 @@ use SimpleSAML\Auth;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
 use SimpleSAML\IdP;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module;
 use SimpleSAML\Stats;
@@ -41,7 +40,7 @@ use SimpleSAML\Utils;
 /**
  * IdP implementation for SAML 2.0 protocol.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/simplesamlphp
  */
 class SAML2
 {
@@ -65,7 +64,7 @@ class SAML2
             '$metadata[' . var_export($spEntityId, true) . ']'
         );
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->info('Sending SAML 2.0 Response to ' . var_export($spEntityId, true));
 
         $requestId = $state['saml:RequestId'];
@@ -154,7 +153,7 @@ class SAML2
         /** @var \SimpleSAML\Module\saml\Error $error */
         $error = \SimpleSAML\Module\saml\Error::fromException($exception);
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->warning("Returning error to SP with entity ID '" . var_export($spEntityId, true) . "'.");
         $exception->log(LogLevel::WARNING);
 
@@ -254,7 +253,7 @@ class SAML2
             return $firstFalse;
         }
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->warning('Authentication request specifies invalid AssertionConsumerService:');
         if ($AssertionConsumerServiceURL !== null) {
             $logger->warning('AssertionConsumerServiceURL: ' . var_export($AssertionConsumerServiceURL, true));
@@ -296,7 +295,7 @@ class SAML2
             $supportedBindings[] = Constants::BINDING_PAOS;
         }
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         if (isset($_REQUEST['spentityid']) || isset($_REQUEST['providerId'])) {
             /* IdP initiated authentication. */
 
@@ -504,7 +503,7 @@ class SAML2
      */
     public static function sendLogoutRequest(IdP $idp, array $association, string $relayState = null): void
     {
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->info('Sending SAML 2.0 LogoutRequest to: ' . var_export($association['saml:entityID'], true));
 
         $metadata = MetaDataStorageHandler::getMetadataHandler();
@@ -554,7 +553,7 @@ class SAML2
         $lr->setInResponseTo($state['saml:RequestId']);
         $lr->setRelayState($state['saml:RelayState']);
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         if (isset($state['core:Failed']) && $state['core:Failed']) {
             $partial = true;
             $lr->setStatus([
@@ -618,7 +617,7 @@ class SAML2
 
         \SimpleSAML\Module\saml\Message::validateMessage($spMetadata, $idpMetadata, $message);
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         if ($message instanceof LogoutResponse) {
             $logger->info('Received SAML 2.0 LogoutResponse from: ' . var_export($spEntityId, true));
             $statsData = [
@@ -678,7 +677,7 @@ class SAML2
      */
     public static function getLogoutURL(IdP $idp, array $association, string $relayState = null): string
     {
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->info('Sending SAML 2.0 LogoutRequest to: ' . var_export($association['saml:entityID'], true));
 
         $metadata = MetaDataStorageHandler::getMetadataHandler();
@@ -945,7 +944,7 @@ class SAML2
         Configuration $spMetadata,
         array &$state
     ): ?string {
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $attribute = $spMetadata->getString('simplesaml.nameidattribute', null);
         if ($attribute === null) {
             $attribute = $idpMetadata->getString('simplesaml.nameidattribute', null);
@@ -1258,7 +1257,7 @@ class SAML2
                    or random id if not assigned/configured */
                 $nameIdValue = self::generateNameIdValue($idpMetadata, $spMetadata, $state);
                 if ($nameIdValue === null) {
-                    $logger = Logger::getInstance();
+                    $logger = Configuration::getInstance()::getLogger();
                     $logger->warning('Falling back to transient NameID.');
                     $nameIdFormat = Constants::NAMEID_TRANSIENT;
                     $nameIdValue = $randomUtils->generateID();

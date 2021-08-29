@@ -11,13 +11,16 @@ declare(strict_types=1);
 namespace SimpleSAML\Locale;
 
 use Gettext\BaseTranslator;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Module;
 
-class Translate
+class Translate implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The configuration to be used for this translator.
      *
@@ -53,13 +56,6 @@ class Translate
      */
     private Language $language;
 
-    /**
-     * The Logger to use
-     *
-     * @var \SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor
@@ -72,7 +68,7 @@ class Translate
         $this->configuration = $configuration;
         $this->language = new Language($configuration);
         $this->defaultDictionary = $defaultDictionary;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
     }
 
 

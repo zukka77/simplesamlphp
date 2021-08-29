@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Metadata;
 
+use Exception;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
@@ -16,11 +19,25 @@ use SimpleSAML\Utils;
  * A metadata storage source can be loaded by passing the configuration of it
  * to the getSource static function.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/simplesamlphp
  */
-
-abstract class MetaDataStorageSource
+abstract class MetaDataStorageSource implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * Constructor for this metadata handler.
+     *
+     * Parses configuration.
+     *
+     * @param array $config The configuration for this metadata handler.
+     */
+    public function __construct(/** @scrutinizer ignore-unused */ array $config)
+    {
+        $this->logger = $this->getLogger();
+    }
+
+
     /**
      * Parse array with metadata sources.
      *
@@ -39,7 +56,7 @@ abstract class MetaDataStorageSource
 
         foreach ($sourcesConfig as $sourceConfig) {
             if (!is_array($sourceConfig)) {
-                throw new \Exception("Found an element in metadata source configuration which wasn't an array.");
+                throw new Exception("Found an element in metadata source configuration which wasn't an array.");
             }
 
             $sources[] = self::getSource($sourceConfig);
@@ -88,7 +105,7 @@ abstract class MetaDataStorageSource
                         'MetadataStore',
                         '\SimpleSAML\Metadata\MetaDataStorageSource'
                     );
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     throw new Error\CriticalConfigurationError(
                         "Invalid 'type' for metadata source. Cannot find store '$type'.",
                         null
@@ -327,7 +344,7 @@ abstract class MetaDataStorageSource
         } elseif ($set === 'adfs-idp-hosted') {
             return 'urn:federation:' . $httpUtils->getSelfHost() . ':idp';
         } else {
-            throw new \Exception('Can not generate dynamic EntityID for metadata of this type: [' . $set . ']');
+            throw new Exception('Can not generate dynamic EntityID for metadata of this type: [' . $set . ']');
         }
     }
 

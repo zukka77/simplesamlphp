@@ -12,11 +12,14 @@ namespace SimpleSAML\Locale;
 
 use Gettext\Translations;
 use Gettext\Translator;
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 
-class Localization
+class Localization implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The configuration to use.
      *
@@ -88,13 +91,6 @@ class Localization
      */
     public string $i18nBackend;
 
-    /**
-     * The Logger to use
-     *
-     * @var\SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor
@@ -104,7 +100,7 @@ class Localization
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         /** @var string $locales */
         $locales = $this->configuration->resolvePath('locales');
         $this->localeDir = $locales;

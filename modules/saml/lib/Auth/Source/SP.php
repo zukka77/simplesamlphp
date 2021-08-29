@@ -13,7 +13,6 @@ use SimpleSAML\Auth;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
 use SimpleSAML\IdP;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module;
 use SimpleSAML\Session;
@@ -64,13 +63,6 @@ class SP extends \SimpleSAML\Auth\Source
      */
     private array $protocols = [Constants::NS_SAMLP];
 
-    /**
-     * The Logger to use
-     *
-     * @var \SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor for SAML SP authentication source.
@@ -103,8 +95,6 @@ class SP extends \SimpleSAML\Auth\Source
         if (empty($this->discoURL) && Module::isModuleEnabled('discojuice')) {
             $this->discoURL = Module::getModuleURL('discojuice/central.php');
         }
-
-        $this->logger = Logger::getInstance();
     }
 
 
@@ -885,7 +875,7 @@ class SP extends \SimpleSAML\Auth\Source
      */
     public static function reauthLogout(array $state): void
     {
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->debug('Proxy: logging the user out before re-authentication.');
 
         if (isset($state['Responder'])) {
@@ -931,7 +921,7 @@ class SP extends \SimpleSAML\Auth\Source
     {
         Assert::keyExists($state, 'saml:sp:AuthId');
 
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         $logger->debug('Proxy: logout completed.');
 
         if (isset($state['saml:proxy:reauthLogout:PrevResponder'])) {

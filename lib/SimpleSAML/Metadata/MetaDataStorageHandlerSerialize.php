@@ -31,9 +31,6 @@ class MetaDataStorageHandlerSerialize extends MetaDataStorageSource
      */
     private string $directory = '/';
 
-    /** \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * Constructor for this metadata handler.
@@ -44,9 +41,9 @@ class MetaDataStorageHandlerSerialize extends MetaDataStorageSource
      */
     public function __construct(array $config)
     {
-        $globalConfig = Configuration::getInstance();
-        $this->logger = Logger::getInstance();
+        parent::__construct($config);
 
+        $globalConfig = Configuration::getInstance();
         $cfgHelp = Configuration::loadFromArray($config, 'serialize metadata source');
 
         $this->directory = $cfgHelp->getString('directory');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Metadata;
 
 use DOMElement;
+use Psr\Log\LoggerAwareInterface;
 use SAML2\Constants;
 use SAML2\XML\md\AttributeAuthorityDescriptor;
 use SAML2\XML\md\AttributeConsumingService;
@@ -27,7 +28,7 @@ use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\shibmd\Scope;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Module\adfs\SAML2\XML\fed\SecurityTokenServiceType;
 use SimpleSAML\Utils;
 
@@ -36,11 +37,13 @@ use SimpleSAML\Utils;
  *
  * This class builds SAML 2.0 metadata for an entity by examining the metadata for the entity.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/simplesamlphp
  */
 
-class SAMLBuilder
+class SAMLBuilder implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The EntityDescriptor we are building.
      *
@@ -64,9 +67,6 @@ class SAMLBuilder
      */
     private ?int $maxDuration = null;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * Initialize the SAML builder.
@@ -80,7 +80,7 @@ class SAMLBuilder
     {
         $this->maxCache = $maxCache;
         $this->maxDuration = $maxDuration;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         $this->entityDescriptor = new EntityDescriptor();
         $this->entityDescriptor->setEntityID($entityId);
     }

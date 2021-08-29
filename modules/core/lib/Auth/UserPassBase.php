@@ -10,7 +10,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
@@ -90,13 +89,6 @@ abstract class UserPassBase extends Auth\Source
      */
     protected bool $rememberMeChecked = false;
 
-    /**
-     * The Logger to use
-     *
-     * @var \SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor for this authentication source.
@@ -131,18 +123,7 @@ abstract class UserPassBase extends Auth\Source
         $this->rememberMeEnabled = $sspcnf->getBoolean('session.rememberme.enable', false);
         $this->rememberMeChecked = $sspcnf->getBoolean('session.rememberme.checked', false);
 
-        $this->logger = Logger::getInstance();
-    }
-
-
-    /**
-     * Set Logger.
-     *
-     * @param \SimpleSAML\Logger $logger  The Logger
-     */
-    public function setLogger(Logger $logger): void
-    {
-        $this->logger = $logger;
+        $this->logger = $this->getLogger();
     }
 
 
@@ -322,7 +303,8 @@ abstract class UserPassBase extends Auth\Source
          * was called. We should call login() on the same authentication source.
          */
 
-        $logger = Logger::getInstance();
+        $config = Configuration::getInstance();
+        $logger = $config::getLogger();
         // Attempt to log in
         try {
             $attributes = $source->login($username, $password);

@@ -10,12 +10,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\XHTML;
 
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Locale\Language;
 use SimpleSAML\Locale\Localization;
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Module;
 use SimpleSAML\TwigConfigurableI18n\Twig\Environment as Twig_Environment;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Extension\I18n as Twig_Extensions_Extension_I18n;
@@ -29,10 +30,9 @@ use Twig\TwigFunction;
  * The content-property is set upstream, but this is not recognized by Psalm
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class Template extends Response
+class Template extends Response implements LoggerAwareInterface
 {
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
+    use LoggerAwareTrait;
 
     /**
      * The data associated with this template, accessible within the template itself.
@@ -123,7 +123,7 @@ class Template extends Response
     public function __construct(Configuration $configuration, string $template, string $defaultDictionary = null)
     {
         $this->configuration = $configuration;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         $this->template = $template;
         // TODO: do not remove the slash from the beginning, change the templates instead!
         $this->data['baseurlpath'] = ltrim($this->configuration->getBasePath(), '/');

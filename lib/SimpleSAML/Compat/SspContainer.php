@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use SAML2\Compat\AbstractContainer;
 use SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\Logger;
+use SimpleSAML\Configuration;
 use SimpleSAML\Utils;
 use SimpleSAML\XML\AbstractXMLElement;
 
@@ -22,7 +22,7 @@ class SspContainer extends AbstractContainer
      */
     public function __construct()
     {
-        $this->logger = Logger::getInstance();
+        $this->logger = Configuration::getInstance()::getLogger();
     }
 
 

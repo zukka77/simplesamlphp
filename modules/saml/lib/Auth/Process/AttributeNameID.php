@@ -7,7 +7,6 @@ namespace SimpleSAML\Module\saml\Auth\Process;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
 use SimpleSAML\Module\saml\BaseNameIDGenerator;
-use SimpleSAML\Logger;
 
 /**
  * Authentication processing filter to create a NameID from an attribute.
@@ -57,17 +56,15 @@ class AttributeNameID extends BaseNameIDGenerator
      */
     protected function getValue(array &$state): ?string
     {
-        $logger = Logger::getInstance();
-
         if (!isset($state['Attributes'][$this->attribute]) || count($state['Attributes'][$this->attribute]) === 0) {
-            $logger->warning(
+            $this->logger->warning(
                 'Missing attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating attribute NameID.'
             );
             return null;
         }
         if (count($state['Attributes'][$this->attribute]) > 1) {
-            $logger->warning(
+            $this->logger->warning(
                 'More than one value in attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating attribute NameID.'
             );
@@ -77,7 +74,7 @@ class AttributeNameID extends BaseNameIDGenerator
         $value = strval($value[0]);
 
         if (empty($value)) {
-            $logger->warning(
+            $this->logger->warning(
                 'Empty value in attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating attribute NameID.'
             );

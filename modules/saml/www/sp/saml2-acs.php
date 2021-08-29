@@ -10,9 +10,9 @@ use SAML2\HTTPArtifact;
 use SAML2\Response;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
 use SimpleSAML\Error;
 use SimpleSAML\Module;
-use SimpleSAML\Logger;
 use SimpleSAML\Session;
 use SimpleSAML\Store;
 use SimpleSAML\Utils;
@@ -70,7 +70,7 @@ $issuer = $issuer->getValue();
 $session = Session::getSessionFromRequest();
 $prevAuth = $session->getAuthData($sourceId, 'saml:sp:prevAuth');
 
-$logger = Logger::getInstance();
+$logger = Configuration::getInstance()::getLogger();
 $httpUtils = new Utils\HTTP();
 if ($prevAuth !== null && $prevAuth['id'] === $response->getId() && $prevAuth['issuer'] === $issuer) {
     /* OK, it looks like this message has the same issuer

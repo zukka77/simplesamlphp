@@ -5,22 +5,25 @@ declare(strict_types=1);
 namespace SimpleSAML\Metadata\Sources;
 
 use Exception;
+use Psr\Log\LoggerAwareInterface;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
+use SimpleSAML\Metadata\MetaDataStorageSource;
 use SimpleSAML\Metadata\SAMLParser;
 use SimpleSAML\Utils;
 
 /**
  * This class implements SAML Metadata Query Protocol
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/simplesamlphp
  */
-
-class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
+class MDQ extends MetaDataStorageSource implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * The URL of MDQ server (url:port)
      *
@@ -43,9 +46,6 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     private int $cacheLength;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
-
 
     /**
      * This function initializes the dynamic XML metadata source.
@@ -64,7 +64,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     protected function __construct(array $config)
     {
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
 
         if (!array_key_exists('server', $config)) {
             throw new Exception(__CLASS__ . ": the 'server' configuration option is not set.");
@@ -220,7 +220,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
             case 'attributeauthority-remote':
                 return $entity->getAttributeAuthorities();
             default:
-                $logger = Logger::getInstance();
+                $logger = Configuration::getInstance()::getLogger();
                 $logger->warning(__CLASS__ . ': unknown metadata set: \'' . $set . '\'.');
         }
 

@@ -1,28 +1,38 @@
 <?php
 
+use Exception;
+use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
+use SimpleSAML\Error;
+use SimpleSAML\IdP;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Stats;
+use SimpleSAML\XHTML\Template;
+
 if (!isset($_REQUEST['id'])) {
-    throw new \SimpleSAML\Error\BadRequest('Missing required parameter: id');
+    throw new Error\BadRequest('Missing required parameter: id');
 }
 
 if (isset($_REQUEST['type'])) {
     $type = (string) $_REQUEST['type'];
     if (!in_array($type, ['init', 'js', 'nojs', 'embed'], true)) {
-        throw new \SimpleSAML\Error\BadRequest('Invalid value for type.');
+        throw new Error\BadRequest('Invalid value for type.');
     }
 } else {
     $type = 'init';
 }
 
-$logger = \SimpleSAML\Logger::getInstance();
+$globalConfig = Configuration::getInstance();
+$logger = $globalConfig::getLogger();
 if ($type !== 'embed') {
     $logger->stats('slo-iframe ' . $type);
-    \SimpleSAML\Stats::log('core:idp:logout-iframe:page', ['type' => $type]);
+    Stats::log('core:idp:logout-iframe:page', ['type' => $type]);
 }
 
 /** @psalm-var array $state */
-$state = \SimpleSAML\Auth\State::loadState($_REQUEST['id'], 'core:Logout-IFrame');
-$idp = \SimpleSAML\IdP::getByState($state);
-$mdh = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler();
+$state = Auth\State::loadState($_REQUEST['id'], 'core:Logout-IFrame');
+$idp = IdP::getByState($state);
+$mdh = MetaDataStorageHandler::getMetadataHandler();
 
 if ($type !== 'init') {
     // update association state
@@ -56,7 +66,7 @@ if ($type !== 'init') {
 
         if (!isset($sp['core:Logout-IFrame:Timeout'])) {
             if (method_exists($sp['Handler'], 'getAssociationConfig')) {
-                $assocIdP = \SimpleSAML\IdP::getByState($sp);
+                $assocIdP = IdP::getByState($sp);
                 $assocConfig = call_user_func([$sp['Handler'], 'getAssociationConfig'], $assocIdP, $sp);
                 $sp['core:Logout-IFrame:Timeout'] = $assocConfig->getInteger('core:logout-timeout', 5) + time();
             } else {
@@ -74,10 +84,10 @@ foreach ($state['core:Logout-IFrame:Associations'] as $assocId => &$sp) {
     }
 
     try {
-        $assocIdP = \SimpleSAML\IdP::getByState($sp);
+        $assocIdP = IdP::getByState($sp);
         $url = call_user_func([$sp['Handler'], 'getLogoutURL'], $assocIdP, $sp, null);
         $sp['core:Logout-IFrame:URL'] = $url;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         $sp['core:Logout-IFrame:State'] = 'failed';
     }
 }
@@ -121,14 +131,13 @@ foreach ($state['core:Logout-IFrame:Associations'] as $association) {
     }
 }
 
-$globalConfig = \SimpleSAML\Configuration::getInstance();
 if ($type === 'nojs') {
-    $t = new \SimpleSAML\XHTML\Template($globalConfig, 'core:logout-iframe-wrapper.twig');
+    $t = new Template($globalConfig, 'core:logout-iframe-wrapper.twig');
 } else {
-    $t = new \SimpleSAML\XHTML\Template($globalConfig, 'core:logout-iframe.twig');
+    $t = new Template($globalConfig, 'core:logout-iframe.twig');
 }
 
-$id = \SimpleSAML\Auth\State::saveState($state, 'core:Logout-IFrame');
+$id = Auth\State::saveState($state, 'core:Logout-IFrame');
 $t->data['auth_state'] = $id;
 $t->data['type'] = $type;
 $t->data['terminated_service'] = $terminated;

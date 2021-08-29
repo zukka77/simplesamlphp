@@ -7,7 +7,6 @@ namespace SimpleSAML\Module\saml\Auth\Process;
 use SAML2\Constants;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Module\saml\BaseNameIDGenerator;
 
 /**
@@ -101,10 +100,8 @@ class SQLPersistentNameID extends BaseNameIDGenerator
      */
     protected function getValue(array &$state): ?string
     {
-        $logger = Logger::getInstance();
-
         if (!isset($state['saml:NameIDFormat']) && !$this->allowUnspecified) {
-            $logger->debug(
+            $this->logger->debug(
                 'SQLPersistentNameID: Request did not specify persistent NameID format, ' .
                 'not generating persistent NameID.'
             );
@@ -120,7 +117,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
             && !in_array($this->format, $validNameIdFormats, true)
             && !$this->allowDifferent
         ) {
-            $logger->debug(
+            $this->logger->debug(
                 'SQLPersistentNameID: SP expects different NameID format (' .
                 implode(', ', $validNameIdFormats) . '),  not generating persistent NameID.'
             );
@@ -128,26 +125,26 @@ class SQLPersistentNameID extends BaseNameIDGenerator
         }
 
         if (!isset($state['Destination']['entityid'])) {
-            $logger->warning('SQLPersistentNameID: No SP entity ID - not generating persistent NameID.');
+            $this->logger->warning('SQLPersistentNameID: No SP entity ID - not generating persistent NameID.');
             return null;
         }
         $spEntityId = $state['Destination']['entityid'];
 
         if (!isset($state['Source']['entityid'])) {
-            $logger->warning('SQLPersistentNameID: No IdP entity ID - not generating persistent NameID.');
+            $this->logger->warning('SQLPersistentNameID: No IdP entity ID - not generating persistent NameID.');
             return null;
         }
         $idpEntityId = $state['Source']['entityid'];
 
         if (!isset($state['Attributes'][$this->attribute]) || count($state['Attributes'][$this->attribute]) === 0) {
-            $logger->warning(
+            $this->logger->warning(
                 'SQLPersistentNameID: Missing attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating persistent NameID.'
             );
             return null;
         }
         if (count($state['Attributes'][$this->attribute]) > 1) {
-            $logger->warning(
+            $this->logger->warning(
                 'SQLPersistentNameID: More than one value in attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating persistent NameID.'
             );
@@ -157,7 +154,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
         $uid = $uid[0];
 
         if (empty($uid)) {
-            $logger->warning(
+            $this->logger->warning(
                 'Empty value in attribute ' . var_export($this->attribute, true) .
                 ' on user - not generating persistent NameID.'
             );
@@ -166,7 +163,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
 
         $value = \SimpleSAML\Module\saml\IdP\SQLNameID::get($idpEntityId, $spEntityId, $uid, $this->storeConfig);
         if ($value !== null) {
-            $logger->debug(
+            $this->logger->debug(
                 'SQLPersistentNameID: Found persistent NameID ' . var_export($value, true) . ' for user ' .
                 var_export($uid, true) . '.'
             );
@@ -174,7 +171,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
         }
 
         if ((!isset($state['saml:AllowCreate']) || !$state['saml:AllowCreate']) && !$this->alwaysCreate) {
-            $logger->warning(
+            $this->logger->warning(
                 'SQLPersistentNameID: Did not find persistent NameID for user, and not allowed to create new NameID.'
             );
             throw new \SimpleSAML\Module\saml\Error(
@@ -184,7 +181,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
         }
 
         $value = bin2hex(openssl_random_pseudo_bytes(20));
-        $logger->debug(
+        $this->logger->debug(
             'SQLPersistentNameID: Created persistent NameID ' . var_export($value, true) . ' for user ' .
             var_export($uid, true) . '.'
         );

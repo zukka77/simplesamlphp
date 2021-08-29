@@ -7,7 +7,7 @@ namespace SimpleSAML\Auth;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Module;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
@@ -22,6 +22,8 @@ use SimpleSAML\Utils;
 
 abstract class Source
 {
+    use LoggerAwareTrait;
+
     /**
      * The authentication source identifier. This identifier can be used to look up this object, for example when
      * returning from a login form.
@@ -45,6 +47,7 @@ abstract class Source
         Assert::keyExists($info, 'AuthId');
 
         $this->authId = $info['AuthId'];
+        $this->logger = $this->getLogger();
     }
 
 
@@ -383,7 +386,8 @@ abstract class Source
 
         $session = Session::getSessionFromRequest();
         if (!$session->isValid($source)) {
-            $logger = Logger::getInstance();
+            $config = Configuration::getInstance();
+            $logger = $config->getLogger();
             $logger->warning(
                 'Received logout from an invalid authentication source ' .
                 var_export($source, true)

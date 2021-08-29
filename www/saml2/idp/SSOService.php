@@ -15,11 +15,10 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
 use SimpleSAML\IdP;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata;
 use SimpleSAML\Module;
 
-$logger = Logger::getInstance();
+$logger = Configuration::getInstance()::getLogger();
 $logger->info('SAML2.0 - IdP.SSOService: Accessing SAML 2.0 IdP endpoint SSOService');
 
 $config = Configuration::getInstance();

@@ -21,7 +21,6 @@ use SAML2\XML\saml\Issuer;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error as SSP_Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Utils;
 
 /**
@@ -134,7 +133,7 @@ class Message
      */
     public static function checkSign(Configuration $srcMetadata, SignedElement $element): bool
     {
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
 
         // find the public key that should verify signatures by this entity
         $keys = $srcMetadata->getPublicKeys('signing');
@@ -375,7 +374,7 @@ class Message
         $blacklist = self::getBlacklistedAlgorithms($srcMetadata, $dstMetadata);
 
         $lastException = null;
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         foreach ($keys as $i => $key) {
             try {
                 $ret = $assertion->getAssertion($key, $blacklist);
@@ -424,7 +423,7 @@ class Message
         $blacklist = self::getBlacklistedAlgorithms($srcMetadata, $dstMetadata);
 
         $error = true;
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         foreach ($keys as $i => $key) {
             try {
                 $assertion->decryptAttributes($key, $blacklist);
@@ -851,7 +850,7 @@ class Message
             $blacklist = self::getBlacklistedAlgorithms($idpMetadata, $spMetadata);
 
             $lastException = null;
-            $logger = Logger::getInstance();
+            $logger = Configuration::getInstance()::getLogger();
             foreach ($keys as $i => $key) {
                 try {
                     $assertion->decryptNameId($key, $blacklist);

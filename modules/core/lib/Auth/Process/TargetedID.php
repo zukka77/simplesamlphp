@@ -9,7 +9,6 @@ use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
-use SimpleSAML\Logger;
 use SimpleSAML\Utils;
 
 /**
@@ -50,8 +49,6 @@ class TargetedID extends Auth\ProcessingFilter
     /** @var \SimpleSAML\Utils\Config */
     protected $configUtils;
 
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
 
     /**
      * Initialize this filter.
@@ -78,7 +75,6 @@ class TargetedID extends Auth\ProcessingFilter
             }
         }
 
-        $this->logger = Logger::getInstance();
         $this->configUtils = new Utils\Config();
     }
 

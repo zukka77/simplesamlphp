@@ -12,14 +12,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML;
 
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Error;
+use SimpleSAML\Logger\LoggerAwareTrait;;
 use SimpleSAML\Utils;
 
 class SessionHandlerPHP extends SessionHandler
 {
-    /** @var \SimpleSAML\Logger */
-    private Logger $logger;
+    use LoggerAwareTrait;
 
     /**
      * This variable contains the session cookie name.
@@ -51,7 +52,7 @@ class SessionHandlerPHP extends SessionHandler
         parent::__construct();
 
         $config = Configuration::getInstance();
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         $this->cookie_name = $config->getString('session.phpsession.cookiename', ini_get('session.name') ?? 'PHPSESSID');
 
         if (session_status() === PHP_SESSION_ACTIVE) {

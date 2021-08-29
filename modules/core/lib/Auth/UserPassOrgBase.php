@@ -7,8 +7,8 @@ namespace SimpleSAML\Module\core\Auth;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
@@ -86,13 +86,6 @@ abstract class UserPassOrgBase extends Auth\Source
      */
     protected bool $rememberOrganizationChecked = false;
 
-    /**
-     * The Logger to use
-     *
-     * @var \SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor for this authentication source.
@@ -108,7 +101,7 @@ abstract class UserPassOrgBase extends Auth\Source
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
 
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
 
         // Get the remember username config options
         if (isset($config['remember.username.enabled'])) {
@@ -307,7 +300,7 @@ abstract class UserPassOrgBase extends Auth\Source
         }
 
         /* Attempt to log in. */
-        $logger = Logger::getInstance();
+        $logger = Configuration::getInstance()::getLogger();
         try {
             $attributes = $source->login($username, $password, $organization);
         } catch (Exception $e) {

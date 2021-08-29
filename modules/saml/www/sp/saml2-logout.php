@@ -14,8 +14,8 @@ use SAML2\LogoutRequest;
 use SAML2\SOAP;
 use SAML2\XML\saml\Issuer;
 use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
 use SimpleSAML\Error;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
@@ -74,7 +74,7 @@ if ($destination !== null && $destination !== $httpUtils->getSelfURLNoQuery()) {
     throw new Error\Exception('Destination in logout message is wrong.');
 }
 
-$logger = Logger::getInstance();
+$logger = Configuration::getInstance()::getLogger();
 if ($message instanceof LogoutResponse) {
     $relayState = $message->getRelayState();
     if ($relayState === null) {

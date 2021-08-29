@@ -10,13 +10,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Locale;
 
+use Psr\Log\LoggerAwareInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger\LoggerAwareTrait;
 use SimpleSAML\Utils;
 
-class Language
+class Language implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * This is the default language map. It is used to map languages codes from the user agent to other language codes.
      * @var array<string, string>
@@ -136,13 +139,6 @@ class Language
         'nn' => 'nn_NO',
     ];
 
-    /**
-     * The Logger to use
-     *
-     * @var \SimpleSAML\Logger
-     */
-    private Logger $logger;
-
 
     /**
      * Constructor
@@ -152,7 +148,7 @@ class Language
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-        $this->logger = Logger::getInstance();
+        $this->logger = $this->getLogger();
         $this->availableLanguages = $this->getInstalledLanguages();
         $this->defaultLanguage = $this->configuration->getString('language.default', 'en');
         $this->languageParameterName = $this->configuration->getString('language.parameter.name', 'language');
