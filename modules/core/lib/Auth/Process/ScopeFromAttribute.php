@@ -58,7 +58,7 @@ class ScopeFromAttribute extends Auth\ProcessingFilter
         $cfg = Configuration::loadFromArray($config, 'ScopeFromAttribute');
         $this->targetAttribute = $cfg->getString('targetAttribute');
         $this->sourceAttribute = $cfg->getString('sourceAttribute');
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

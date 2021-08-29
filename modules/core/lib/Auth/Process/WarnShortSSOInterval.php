@@ -47,7 +47,7 @@ class WarnShortSSOInterval extends Auth\ProcessingFilter
             $entityId = 'UNKNOWN';
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->warning('WarnShortSSOInterval: Only ' . $timeDelta .
             ' seconds since last SSO for this user from the SP ' . var_export($entityId, true));
 

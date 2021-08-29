@@ -104,7 +104,7 @@ class SP extends \SimpleSAML\Auth\Source
             $this->discoURL = Module::getModuleURL('discojuice/central.php');
         }
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 
@@ -885,7 +885,7 @@ class SP extends \SimpleSAML\Auth\Source
      */
     public static function reauthLogout(array $state): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Proxy: logging the user out before re-authentication.');
 
         if (isset($state['Responder'])) {
@@ -931,7 +931,7 @@ class SP extends \SimpleSAML\Auth\Source
     {
         Assert::keyExists($state, 'saml:sp:AuthId');
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Proxy: logout completed.');
 
         if (isset($state['saml:proxy:reauthLogout:PrevResponder'])) {

@@ -64,7 +64,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     protected function __construct(array $config)
     {
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         if (!array_key_exists('server', $config)) {
             throw new Exception(__CLASS__ . ": the 'server' configuration option is not set.");
@@ -220,7 +220,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
             case 'attributeauthority-remote':
                 return $entity->getAttributeAuthorities();
             default:
-                $logger = new Logger();
+                $logger = Logger::getInstance();
                 $logger->warning(__CLASS__ . ': unknown metadata set: \'' . $set . '\'.');
         }
 

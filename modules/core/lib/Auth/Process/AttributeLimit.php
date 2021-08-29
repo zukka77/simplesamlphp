@@ -48,7 +48,7 @@ class AttributeLimit extends Auth\ProcessingFilter
     {
         parent::__construct($config, $reserved);
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         foreach ($config as $index => $value) {
             if ($index === 'default') {

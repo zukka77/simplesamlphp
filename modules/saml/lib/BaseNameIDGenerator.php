@@ -99,7 +99,7 @@ abstract class BaseNameIDGenerator extends \SimpleSAML\Auth\ProcessingFilter
         $nameId->setValue($value);
         $nameId->setFormat($this->format);
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         if ($this->nameQualifier === true) {
             if (isset($state['IdPMetadata']['entityid'])) {

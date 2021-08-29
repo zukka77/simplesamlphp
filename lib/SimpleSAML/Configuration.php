@@ -164,7 +164,7 @@ class Configuration implements Utils\ClearableState
         self::$loadedConfigs[$filename] = $cfg;
 
         if ($spurious_output) {
-            $logger = new Logger();
+            $logger = Logger::getInstance();
             $logger->warning(
                 "The configuration file '$filename' generates output. Please review your configuration."
             );

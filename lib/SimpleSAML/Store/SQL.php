@@ -56,7 +56,7 @@ class SQL extends Store
     public function __construct()
     {
         $config = Configuration::getInstance();
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         $dsn = $config->getString('store.sql.dsn');
         $username = $config->getString('store.sql.username', null);

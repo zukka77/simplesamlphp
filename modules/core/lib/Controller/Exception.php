@@ -49,7 +49,7 @@ class Exception
         Session $session
     ) {
         $this->config = $config;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->session = $session;
     }
 

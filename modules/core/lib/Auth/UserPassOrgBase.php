@@ -108,7 +108,7 @@ abstract class UserPassOrgBase extends Auth\Source
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         // Get the remember username config options
         if (isset($config['remember.username.enabled'])) {
@@ -307,7 +307,7 @@ abstract class UserPassOrgBase extends Auth\Source
         }
 
         /* Attempt to log in. */
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         try {
             $attributes = $source->login($username, $password, $organization);
         } catch (Exception $e) {

@@ -134,7 +134,7 @@ class Message
      */
     public static function checkSign(Configuration $srcMetadata, SignedElement $element): bool
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         // find the public key that should verify signatures by this entity
         $keys = $srcMetadata->getPublicKeys('signing');
@@ -375,7 +375,7 @@ class Message
         $blacklist = self::getBlacklistedAlgorithms($srcMetadata, $dstMetadata);
 
         $lastException = null;
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         foreach ($keys as $i => $key) {
             try {
                 $ret = $assertion->getAssertion($key, $blacklist);
@@ -424,7 +424,7 @@ class Message
         $blacklist = self::getBlacklistedAlgorithms($srcMetadata, $dstMetadata);
 
         $error = true;
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         foreach ($keys as $i => $key) {
             try {
                 $assertion->decryptAttributes($key, $blacklist);
@@ -851,7 +851,7 @@ class Message
             $blacklist = self::getBlacklistedAlgorithms($idpMetadata, $spMetadata);
 
             $lastException = null;
-            $logger = new Logger();
+            $logger = Logger::getInstance();
             foreach ($keys as $i => $key) {
                 try {
                     $assertion->decryptNameId($key, $blacklist);

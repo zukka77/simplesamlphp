@@ -124,7 +124,7 @@ class IdPDisco
     {
         // initialize standard classes
         $this->config = Configuration::getInstance();
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->metadata = MetaDataStorageHandler::getMetadataHandler();
         $this->session = Session::getSessionFromRequest();
         $this->instance = $instance;

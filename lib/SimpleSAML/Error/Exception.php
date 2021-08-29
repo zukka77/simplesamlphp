@@ -60,7 +60,7 @@ class Exception extends \Exception
         parent::__construct($message, $code);
 
         $this->initBacktrace($this);
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         if ($cause !== null) {
             $this->cause = Exception::fromException($cause);

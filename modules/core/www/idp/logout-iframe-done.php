@@ -10,7 +10,7 @@ $idp = \SimpleSAML\IdP::getByState($state);
 
 $associations = $idp->getAssociations();
 
-$logger = new \SimpleSAML\Logger();
+$logger = \SimpleSAML\Logger::getInstance();
 if (!isset($_REQUEST['cancel'])) {
     $logger->stats('slo-iframe done');
     \SimpleSAML\Stats::log('core:idp:logout-iframe:page', ['type' => 'done']);

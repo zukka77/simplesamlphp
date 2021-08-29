@@ -21,7 +21,7 @@ class SspContainer extends AbstractContainer
      */
     public function __construct()
     {
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

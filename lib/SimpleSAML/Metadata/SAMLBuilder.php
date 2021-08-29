@@ -80,7 +80,7 @@ class SAMLBuilder
     {
         $this->maxCache = $maxCache;
         $this->maxDuration = $maxDuration;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->entityDescriptor = new EntityDescriptor();
         $this->entityDescriptor->setEntityID($entityId);
     }

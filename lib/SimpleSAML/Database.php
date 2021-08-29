@@ -96,7 +96,7 @@ class Database
             $driverOptions
         );
 
-        $logger = new Logger();
+        $logger = Logger::GetInstance();
         // TODO: deprecated: the "database.slave" terminology is preserved here for backwards compatibility.
         if ($config->getArray('database.slaves', null) !== null) {
             $logger->warning(

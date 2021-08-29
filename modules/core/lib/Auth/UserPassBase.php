@@ -131,7 +131,7 @@ abstract class UserPassBase extends Auth\Source
         $this->rememberMeEnabled = $sspcnf->getBoolean('session.rememberme.enable', false);
         $this->rememberMeChecked = $sspcnf->getBoolean('session.rememberme.checked', false);
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 
@@ -322,7 +322,7 @@ abstract class UserPassBase extends Auth\Source
          * was called. We should call login() on the same authentication source.
          */
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         // Attempt to log in
         try {
             $attributes = $source->login($username, $password);

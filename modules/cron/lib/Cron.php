@@ -39,7 +39,7 @@ class Cron
             $cronconfig = Configuration::getConfig('module_cron.php');
         }
         $this->cronconfig = $cronconfig;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

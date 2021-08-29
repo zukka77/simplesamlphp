@@ -43,7 +43,7 @@ class Cardinality extends Auth\ProcessingFilter
     {
         parent::__construct($config, $reserved);
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->httpUtils = $httpUtils ?: new Utils\HTTP();
 
         foreach ($config as $attribute => $rules) {

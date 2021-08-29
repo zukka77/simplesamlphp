@@ -22,7 +22,7 @@ if (!preg_match('/^[0-9a-f]{8}$/', $reportId)) {
 }
 
 $data = null;
-$logger = new \SimpleSAML\Logger();
+$logger = \SimpleSAML\Logger::getInstance();
 try {
     $session = \SimpleSAML\Session::getSessionFromRequest();
     $data = $session->getData('core:errorreport', $reportId);

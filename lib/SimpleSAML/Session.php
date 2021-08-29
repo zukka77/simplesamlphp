@@ -154,7 +154,7 @@ class Session implements Serializable, Utils\ClearableState
     private function __construct(bool $transient = false)
     {
         $this->setConfiguration(Configuration::getInstance());
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         if (php_sapi_name() === 'cli' || defined('STDIN')) {
             $this->trackid = 'CL' . bin2hex(openssl_random_pseudo_bytes(4));
@@ -258,7 +258,7 @@ class Session implements Serializable, Utils\ClearableState
      */
     public static function getSessionFromRequest(): Session
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         // check if we already have initialized the session
         /** @psalm-suppress RedundantCondition */
@@ -361,7 +361,7 @@ class Session implements Serializable, Utils\ClearableState
 
         if ($checkToken) {
             $globalConfig = Configuration::getInstance();
-            $logger = new Logger();
+            $logger = Logger::getInstance();
 
             if ($session->authToken !== null) {
                 $authTokenCookieName = $globalConfig->getString(
@@ -408,7 +408,7 @@ class Session implements Serializable, Utils\ClearableState
      */
     private static function load(Session $session): Session
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger::setTrackId($session->getTrackID());
         self::$instance = $session;
         return self::$instance;
@@ -468,7 +468,7 @@ class Session implements Serializable, Utils\ClearableState
         $this->callback_registered = false;
 
         $sh = SessionHandler::getSessionHandler();
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         try {
             $sh->saveSession($this);
         } catch (\Exception $e) {
@@ -606,7 +606,7 @@ class Session implements Serializable, Utils\ClearableState
      */
     public function doLogin(string $authority, array $data = []): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Session: doLogin("' . $authority . '")');
 
         $this->markDirty();
@@ -699,7 +699,7 @@ class Session implements Serializable, Utils\ClearableState
      */
     public function doLogout(string $authority): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Session: doLogout(' . var_export($authority, true) . ')');
 
         if (!isset($this->authData[$authority])) {
@@ -764,7 +764,7 @@ class Session implements Serializable, Utils\ClearableState
      */
     public function isValid(string $authority): bool
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         if (!isset($this->authData[$authority])) {
             $logger->debug(
                 'Session: ' . var_export($authority, true) . ' not valid because we are not authenticated.'

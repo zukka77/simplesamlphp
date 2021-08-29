@@ -78,7 +78,7 @@ class TargetedID extends Auth\ProcessingFilter
             }
         }
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->configUtils = new Utils\Config();
     }
 

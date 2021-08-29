@@ -66,7 +66,7 @@ class Federation
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->menu = new Menu();
         $this->mdHandler = MetaDataStorageHandler::getMetadataHandler();
         $this->authUtils = new Utils\Auth();

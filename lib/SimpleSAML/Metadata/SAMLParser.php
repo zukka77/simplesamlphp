@@ -904,7 +904,7 @@ class SAMLParser
             $ret['RegistrationInfo'] = $parentExtensions['RegistrationInfo'];
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         foreach ($element->getExtensions() as $e) {
             if ($e instanceof Scope) {
                 $ret['scope'][] = $e->getScope();
@@ -1328,7 +1328,7 @@ class SAMLParser
                 }
             }
         }
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Could not validate signature');
         return false;
     }

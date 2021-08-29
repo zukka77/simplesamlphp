@@ -13,7 +13,7 @@ if (isset($_REQUEST['type'])) {
     $type = 'init';
 }
 
-$logger = new \SimpleSAML\Logger();
+$logger = \SimpleSAML\Logger::getInstance();
 if ($type !== 'embed') {
     $logger->stats('slo-iframe ' . $type);
     \SimpleSAML\Stats::log('core:idp:logout-iframe:page', ['type' => $type]);

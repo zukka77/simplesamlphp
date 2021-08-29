@@ -47,7 +47,7 @@ class FilterScopes extends ProcessingFilter
             $this->scopedAttributes = $config['attributes'];
         }
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
     /**

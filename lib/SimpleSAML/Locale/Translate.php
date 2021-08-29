@@ -72,7 +72,7 @@ class Translate
         $this->configuration = $configuration;
         $this->language = new Language($configuration);
         $this->defaultDictionary = $defaultDictionary;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

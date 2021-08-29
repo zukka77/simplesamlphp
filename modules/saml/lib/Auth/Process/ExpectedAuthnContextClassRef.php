@@ -63,7 +63,7 @@ class ExpectedAuthnContextClassRef extends ProcessingFilter
     public function __construct(array $config, $reserved)
     {
         parent::__construct($config, $reserved);
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         if (empty($config['accepted'])) {
             $this->logger->error(

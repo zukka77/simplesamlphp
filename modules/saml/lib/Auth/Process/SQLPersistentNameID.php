@@ -101,7 +101,7 @@ class SQLPersistentNameID extends BaseNameIDGenerator
      */
     protected function getValue(array &$state): ?string
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         if (!isset($state['saml:NameIDFormat']) && !$this->allowUnspecified) {
             $logger->debug(

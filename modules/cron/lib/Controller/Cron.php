@@ -61,7 +61,7 @@ class Cron
         Session $session
     ) {
         $this->config = $config;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->cronconfig = Configuration::getConfig('module_cron.php');
         $this->session = $session;
         $this->authUtils = new Utils\Auth();

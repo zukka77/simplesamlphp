@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\saml\IdP;
 
+use Exception;
 use PDO;
 use PDOStatement;
 use SimpleSAML\Assert\Assert;
@@ -90,8 +91,8 @@ class SQLNameID
         if ($store === null) {
             try {
                 self::createTable($table, $config);
-            } catch (\Exception $e) {
-                $logger = new Logger();
+            } catch (Exception $e) {
+                $logger = Logger::getInstance();
                 $logger->debug('SQL persistent NameID table already exists.');
             }
         } elseif ($store->getTableVersion('saml_PersistentNameID') !== self::TABLE_VERSION) {

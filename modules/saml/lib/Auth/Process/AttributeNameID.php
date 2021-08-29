@@ -57,7 +57,7 @@ class AttributeNameID extends BaseNameIDGenerator
      */
     protected function getValue(array &$state): ?string
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         if (!isset($state['Attributes'][$this->attribute]) || count($state['Attributes'][$this->attribute]) === 0) {
             $logger->warning(

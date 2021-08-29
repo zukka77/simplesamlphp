@@ -70,7 +70,7 @@ $issuer = $issuer->getValue();
 $session = Session::getSessionFromRequest();
 $prevAuth = $session->getAuthData($sourceId, 'saml:sp:prevAuth');
 
-$logger = new Logger();
+$logger = Logger::getInstance();
 $httpUtils = new Utils\HTTP();
 if ($prevAuth !== null && $prevAuth['id'] === $response->getId() && $prevAuth['issuer'] === $issuer) {
     /* OK, it looks like this message has the same issuer

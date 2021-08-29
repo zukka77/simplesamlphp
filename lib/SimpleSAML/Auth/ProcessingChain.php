@@ -77,7 +77,7 @@ class ProcessingChain
             self::addFilters($this->filters, $spFilters);
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug(
             sprintf(
                 'Filter config for %s -> %s: %s',

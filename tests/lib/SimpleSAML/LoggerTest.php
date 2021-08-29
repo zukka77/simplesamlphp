@@ -46,7 +46,7 @@ class LoggerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

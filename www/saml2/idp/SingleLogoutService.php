@@ -19,7 +19,7 @@ use SimpleSAML\Metadata;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
-$logger = new Logger();
+$logger = Logger::getInstance();
 $logger->info('SAML2.0 - IdP.SingleLogoutService: Accessing SAML 2.0 IdP endpoint SingleLogoutService');
 
 $config = Configuration::getInstance();

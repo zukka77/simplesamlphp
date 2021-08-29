@@ -250,7 +250,7 @@ class Module
             throw new Error\NotFound('Directory listing not available.');
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         if (!file_exists($path)) {
             // file not found
             $logger->info('Could not find file \'' . $path . '\'.');

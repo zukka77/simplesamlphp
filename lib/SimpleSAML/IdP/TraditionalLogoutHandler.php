@@ -39,7 +39,7 @@ class TraditionalLogoutHandler implements LogoutHandlerInterface
     public function __construct(IdP $idp)
     {
         $this->idp = $idp;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
     }
 
 

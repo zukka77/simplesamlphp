@@ -32,7 +32,7 @@ class LanguageAdaptor extends Auth\ProcessingFilter
     public function __construct(array &$config, $reserved)
     {
         parent::__construct($config, $reserved);
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         if (array_key_exists('attributename', $config)) {
             $this->langattr = $config['attributename'];

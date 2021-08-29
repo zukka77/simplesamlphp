@@ -42,7 +42,7 @@ class Memcache
      */
     public static function get(string $key)
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug("loading key $key from memcache");
 
         $latestInfo = null;
@@ -147,7 +147,7 @@ class Memcache
      */
     public static function set(string $key, $value, ?int $expire = null): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug("saving key $key to memcache");
         $savedInfo = [
             'timestamp' => microtime(true),
@@ -174,7 +174,7 @@ class Memcache
      */
     public static function delete(string $key): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug("deleting key $key from memcache");
 
         // store this object to all groups of memcache servers

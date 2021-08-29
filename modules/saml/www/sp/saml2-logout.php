@@ -74,7 +74,7 @@ if ($destination !== null && $destination !== $httpUtils->getSelfURLNoQuery()) {
     throw new Error\Exception('Destination in logout message is wrong.');
 }
 
-$logger = new Logger();
+$logger = Logger::getInstance();
 if ($message instanceof LogoutResponse) {
     $relayState = $message->getRelayState();
     if ($relayState === null) {

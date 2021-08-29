@@ -152,7 +152,7 @@ class Language
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->availableLanguages = $this->getInstalledLanguages();
         $this->defaultLanguage = $this->configuration->getString('language.default', 'en');
         $this->languageParameterName = $this->configuration->getString('language.parameter.name', 'language');

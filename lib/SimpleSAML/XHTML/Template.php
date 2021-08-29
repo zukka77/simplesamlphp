@@ -123,7 +123,7 @@ class Template extends Response
     public function __construct(Configuration $configuration, string $template, string $defaultDictionary = null)
     {
         $this->configuration = $configuration;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         $this->template = $template;
         // TODO: do not remove the slash from the beginning, change the templates instead!
         $this->data['baseurlpath'] = ltrim($this->configuration->getBasePath(), '/');

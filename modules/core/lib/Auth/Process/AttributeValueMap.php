@@ -65,7 +65,7 @@ class AttributeValueMap extends Auth\ProcessingFilter
     {
         parent::__construct($config, $reserved);
 
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         // parse configuration
         foreach ($config as $name => $value) {

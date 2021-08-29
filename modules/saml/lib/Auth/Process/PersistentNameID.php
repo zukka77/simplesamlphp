@@ -56,7 +56,7 @@ class PersistentNameID extends BaseNameIDGenerator
      */
     protected function getValue(array &$state): ?string
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         if (!isset($state['Destination']['entityid'])) {
             $logger->warning('No SP entity ID - not generating persistent NameID.');

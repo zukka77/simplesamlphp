@@ -104,7 +104,7 @@ class Localization
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
         /** @var string $locales */
         $locales = $this->configuration->resolvePath('locales');
         $this->localeDir = $locales;

@@ -26,7 +26,7 @@ class LogoutStore
      */
     private static function createLogoutTable(Store\SQL $store): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $tableVer = $store->getTableVersion('saml_LogoutStore');
         if ($tableVer === 4) {
             return;
@@ -212,7 +212,7 @@ class LogoutStore
      */
     private static function cleanLogoutStore(Store\SQL $store): void
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('saml.LogoutStore: Cleaning logout store.');
 
         $query = 'DELETE FROM ' . $store->prefix . '_saml_LogoutStore WHERE _expire < :now';
@@ -426,7 +426,7 @@ class LogoutStore
             $sessionIndexes = array_keys($sessions);
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $numLoggedOut = 0;
         foreach ($sessionIndexes as $sessionIndex) {
             if (!isset($sessions[$sessionIndex])) {

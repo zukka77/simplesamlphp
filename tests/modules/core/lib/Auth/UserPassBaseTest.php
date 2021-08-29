@@ -61,7 +61,7 @@ class UserPassBaseTest extends TestCase
         $stub = $this->getMockBuilder(UserPassBase::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $stub->setLogger(new Logger());
+        $stub->setLogger(Logger::getInstance());
 
         /** @var \SimpleSAML\Module\core\Auth\UserPassBase $stub */
         $stub->authenticate($state);
@@ -85,7 +85,7 @@ class UserPassBaseTest extends TestCase
         $stub = $this->getMockBuilder(UserPassBase::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $stub->setLogger(new Logger());
+        $stub->setLogger(Logger::getInstance());
 
         /** @var \SimpleSAML\Module\core\Auth\UserPassBase $stub */
         $stub->authenticate($state);

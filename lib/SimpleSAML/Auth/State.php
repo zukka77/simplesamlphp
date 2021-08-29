@@ -213,7 +213,7 @@ class State
         $session = Session::getSessionFromRequest();
         $session->setData('\SimpleSAML\Auth\State', $id, $serializedState, self::getStateTimeout());
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Saved state: ' . var_export($return, true));
 
         return $return;
@@ -233,7 +233,7 @@ class State
     {
         $clonedState = $state;
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         if (array_key_exists(self::ID, $state)) {
             $clonedState[self::CLONE_ORIGINAL_ID] = $state[self::ID];
             unset($clonedState[self::ID]);
@@ -265,7 +265,7 @@ class State
      */
     public static function loadState(string $id, string $stage, bool $allowMissing = false): ?array
     {
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Loading state: ' . var_export($id, true));
 
         $sid = self::parseStateID($id);
@@ -329,7 +329,7 @@ class State
             return;
         }
 
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $logger->debug('Deleting state: ' . var_export($state[self::ID], true));
 
         $session = Session::getSessionFromRequest();

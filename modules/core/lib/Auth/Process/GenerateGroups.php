@@ -35,7 +35,7 @@ class GenerateGroups extends Auth\ProcessingFilter
     public function __construct(array &$config, $reserved)
     {
         parent::__construct($config, $reserved);
-        $this->logger = new Logger();
+        $this->logger = Logger::getInstance();
 
         if (count($config) === 0) {
             // Use default groups

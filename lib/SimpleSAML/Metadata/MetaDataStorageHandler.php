@@ -148,7 +148,7 @@ class MetaDataStorageHandler implements ClearableState
     {
         $result = [];
         $timeUtils = new Utils\Time();
-        $logger = new Logger();
+        $logger = Logger::getInstance();
 
         foreach ($this->sources as $source) {
             $srcList = $source->getMetadataSet($set);
@@ -271,7 +271,7 @@ class MetaDataStorageHandler implements ClearableState
     public function getMetaDataForEntities(array $entityIds, string $set): array
     {
         $result = [];
-        $logger = new Logger();
+        $logger = Logger::getInstance();
         $timeUtils = new Utils\Time();
         foreach ($this->sources as $source) {
             $srcList = $source->getMetaDataForEntities($entityIds, $set);
