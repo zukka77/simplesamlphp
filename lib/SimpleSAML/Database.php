@@ -7,7 +7,6 @@ namespace SimpleSAML;
 use PDO;
 use PDOException;
 use PDOStatement;
-use SimpleSAML\Logger;
 
 /**
  * This file implements functions to read and write to a group of database servers.
@@ -96,7 +95,7 @@ class Database
             $driverOptions
         );
 
-        $logger = Logger::GetInstance();
+        $logger = Configuration::getInstance()::getLogger();
         // TODO: deprecated: the "database.slave" terminology is preserved here for backwards compatibility.
         if ($config->getArray('database.slaves', null) !== null) {
             $logger->warning(

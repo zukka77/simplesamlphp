@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\Utils;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SimpleSAML\Error;
 use SimpleSAML\Utils\Attributes;
 
@@ -29,6 +30,7 @@ class AttributesTest extends TestCase
         parent::setUp();
 
         $this->attrUtils = new Attributes();
+        $this->attrUtils->setLogger(new NullLogger());
     }
 
 
