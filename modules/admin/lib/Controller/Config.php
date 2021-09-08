@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\admin\Controller;
 
+use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Locale\Translate;
@@ -319,6 +320,7 @@ class Config
         foreach ($libs as $lib) {
             $enabled = false;
             foreach ($lib['classes'] as $class) {
+                /** @psalm-suppress InvalidOperand - See https://github.com/vimeo/psalm/issues/1340 */
                 $enabled |= class_exists($class);
             }
             $matrix[] = [
@@ -346,25 +348,36 @@ class Config
         // perform some sanity checks on the configured certificates
         if ($this->config->getBoolean('enable.saml20-idp', false) !== false) {
             $handler = MetaDataStorageHandler::getMetadataHandler();
-            $metadata = $handler->getMetaDataCurrent('saml20-idp-hosted');
-            $metadata_config = Configuration::loadfromArray($metadata);
-            $private = $cryptoUtils->loadPrivateKey($metadata_config, false);
-            $public = $cryptoUtils->loadPublicKey($metadata_config, false);
+            try {
+                $metadata = $handler->getMetaDataCurrent('saml20-idp-hosted');
+            } catch (Exception $e) {
+                    $matrix[] = [
+                        'required' => 'required',
+                        'descr' => Translate::noop('Hosted IdP metadata present'),
+                        'enabled' => false
+                    ];
+            }
 
-            $matrix[] = [
-                'required' => 'required',
-                'descr' => Translate::noop('Matching key-pair for signing assertions'),
-                'enabled' => $this->matchingKeyPair($public['PEM'], $private['PEM'], $private['password']),
-            ];
+            if (isset($metadata)) {
+                $metadata_config = Configuration::loadfromArray($metadata);
+                $private = $cryptoUtils->loadPrivateKey($metadata_config, false);
+                $public = $cryptoUtils->loadPublicKey($metadata_config, false);
 
-            $private = $cryptoUtils->loadPrivateKey($metadata_config, false, 'new_');
-            if ($private !== null) {
-                $public = $cryptoUtils->loadPublicKey($metadata_config, false, 'new_');
                 $matrix[] = [
                     'required' => 'required',
-                    'descr' => Translate::noop('Matching key-pair for signing assertions (rollover key)'),
+                    'descr' => Translate::noop('Matching key-pair for signing assertions'),
                     'enabled' => $this->matchingKeyPair($public['PEM'], $private['PEM'], $private['password']),
                 ];
+
+                $private = $cryptoUtils->loadPrivateKey($metadata_config, false, 'new_');
+                if ($private !== null) {
+                    $public = $cryptoUtils->loadPublicKey($metadata_config, false, 'new_');
+                    $matrix[] = [
+                        'required' => 'required',
+                        'descr' => Translate::noop('Matching key-pair for signing assertions (rollover key)'),
+                        'enabled' => $this->matchingKeyPair($public['PEM'], $private['PEM'], $private['password']),
+                    ];
+                }
             }
         }
 
@@ -376,7 +389,6 @@ class Config
                 'descr' => Translate::noop('Matching key-pair for signing metadata'),
                 'enabled' => $this->matchingKeyPair($public['PEM'], $private['PEM'], $private['password']),
             ];
-
         }
 
         return $matrix;
@@ -485,7 +497,11 @@ class Config
      * @param string|null $password
      * @return bool
      */
-    private function matchingKeyPair(string $publicKey, string $privateKey, ?string $password = null) : bool {
+    private function matchingKeyPair(
+        string $publicKey,
+        string $privateKey,
+        ?string $password = null
+    ): bool {
         return openssl_x509_check_private_key($publicKey, [$privateKey, $password]);
     }
 }

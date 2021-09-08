@@ -41,7 +41,8 @@ Only allow specific values for an attribute.
     'authproc' => [
         50 => [
             'class' => 'core:AttributeLimit',
-            'eduPersonEntitlement' => array('urn:x-surfnet:surf.nl:surfdrive:quota:100')
+
+            'eduPersonEntitlement' => ['urn:mace:surf.nl:surfdrive:quota:100']
         ],
     ],
 
@@ -52,8 +53,8 @@ Only allow specific values for an attribute ignoring case.
             'class' => 'core:AttributeLimit',
             'eduPersonEntitlement' => [
                 'ignoreCase' => true,
-                'URN:x-surfnet:surf.nl:SURFDRIVE:quota:100'
-             ],
+                'URN:mace:surf.nl:SURFDRIVE:quota:100'
+             ]
         ],
     ],
     
@@ -64,7 +65,7 @@ Only allow specific values for an attribute that match a regex pattern
             'class' => 'core:AttributeLimit',
             'eduPersonEntitlement' => [
                 'regex' => true,
-                '/^urn:x-surfnet:surf/',
+                '/^urn:mace:surf/',
                 '/^urn:x-IGNORE_Case/i',
             ],
         ],

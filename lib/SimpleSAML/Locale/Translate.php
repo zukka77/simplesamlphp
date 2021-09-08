@@ -144,78 +144,6 @@ class Translate
 
 
     /**
-     * Retrieve the preferred translation of a given text.
-     *
-     * @param array $translations The translations, as an associative array with language => text mappings.
-     *
-     * @return string The preferred translation.
-     *
-     * @throws \Exception If there's no suitable translation.
-     */
-    public function getPreferredTranslation(array $translations): string
-    {
-        // look up translation of tag in the selected language
-        $selected_language = $this->language->getLanguage();
-        if (array_key_exists($selected_language, $translations)) {
-            return $translations[$selected_language];
-        }
-
-        // look up translation of tag in the default language
-        $default_language = $this->language->getDefaultLanguage();
-        if (array_key_exists($default_language, $translations)) {
-            return $translations[$default_language];
-        }
-
-        // check for english translation
-        if (array_key_exists('en', $translations)) {
-            return $translations['en'];
-        }
-
-        // pick the first translation available
-        if (count($translations) > 0) {
-            $languages = array_keys($translations);
-            return $translations[$languages[0]];
-        }
-
-        // we don't have anything to return
-        throw new \Exception('Nothing to return from translation.');
-    }
-
-
-    /**
-     * Translate the name of an attribute.
-     *
-     * @param string $name The attribute name.
-     *
-     * @return string The translated attribute name, or the original attribute name if no translation was found.
-     */
-    public function getAttributeTranslation(string $name): string
-    {
-        // normalize attribute name
-        $normName = strtolower($name);
-        $normName = str_replace([":", "-"], "_", $normName);
-
-        // check for an extra dictionary
-        $extraDict = $this->configuration->getString('attributes.extradictionary', null);
-        if ($extraDict !== null) {
-            $dict = $this->getDictionary($extraDict);
-            if (array_key_exists($normName, $dict)) {
-                return $this->getPreferredTranslation($dict[$normName]);
-            }
-        }
-
-        // search the default attribute dictionary
-        $dict = $this->getDictionary('attributes');
-        if (array_key_exists('attribute_' . $normName, $dict)) {
-            return $this->getPreferredTranslation($dict['attribute_' . $normName]);
-        }
-
-        // no translations found
-        return $name;
-    }
-
-
-    /**
      * Mark a string for translation without translating it.
      *
      * @param string $tag A tag name to mark for translation.
@@ -430,20 +358,6 @@ class Translate
             return null;
         } elseif (isset($translations[$context['currentLanguage']])) {
             return $translations[$context['currentLanguage']];
-        }
-
-        // we don't have a translation for the current language, load alternative priorities
-        $sspcfg = Configuration::getInstance();
-        /** @psalm-var \SimpleSAML\Configuration $langcfg */
-        $langcfg = $sspcfg->getConfigItem('language');
-        $priorities = $langcfg->getArray('priorities', []);
-
-        if (!empty($priorities[$context['currentLanguage']])) {
-            foreach ($priorities[$context['currentLanguage']] as $lang) {
-                if (isset($translations[$lang])) {
-                    return $translations[$lang];
-                }
-            }
         }
 
         // nothing we can use, return null so that we can set a default

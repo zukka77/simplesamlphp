@@ -149,29 +149,6 @@ class Federation
             }
         }
 
-        $translators = [
-            'name' => 'name_translated',
-            'descr' => 'descr_translated',
-            'OrganizationDisplayName' => 'organizationdisplayname_translated',
-        ];
-
-        foreach ($entries['remote'] as $key => $set) {
-            foreach ($set as $entityid => $entity) {
-                foreach ($translators as $old => $new) {
-                    if (isset($entity[$old][$language])) {
-                        $entries['remote'][$key][$entityid][$new] = $entity[$old][$language];
-                    } elseif (isset($entity[$old][$defaultLang])) {
-                        $entries['remote'][$key][$entityid][$new] = $entity[$old][$defaultLang];
-                    } elseif (isset($entity[$old]['en'])) {
-                        $entries['remote'][$key][$entityid][$new] = $entity[$old]['en'];
-                    } elseif (isset($entries['remote'][$key][$entityid][$old])) {
-                        $old_entry = $entries['remote'][$key][$entityid][$old];
-                        $entries['remote'][$key][$entityid][$new] = is_array($old_entry) ? $entityid : $old_entry;
-                    }
-                }
-            }
-        }
-
         $t->data = [
             'links' => [
                 [
@@ -203,7 +180,7 @@ class Federation
 
 
     /**
-     * Get a list of the hosted IdP entities, including SAML 2, SAML 1.1 and ADFS.
+     * Get a list of the hosted IdP entities, including SAML 2 and ADFS.
      *
      * @return array
      * @throws \Exception
@@ -238,11 +215,6 @@ class Federation
                     $builder = new SAMLBuilder($entity['entityid']);
                     $builder->addMetadataIdP20($entity['metadata_array']);
                     $builder->addOrganizationInfo($entity['metadata_array']);
-                    if (isset($entity['metadata_array']['contacts'])) {
-                        foreach ($entity['metadata_array']['contacts'] as $contact) {
-                            $builder->addContact($contact['contactType'], $contact);
-                        }
-                    }
 
                     $entity['metadata'] = Signer::sign(
                         $builder->getEntityDescriptorText(),
@@ -307,7 +279,7 @@ class Federation
                     'admin/federation/cert',
                     [
                         'set' => $entity['metadata-set'],
-                        'idp' => $entity['metadata-index'],
+                        'entity' => $entity['metadata-index'],
                         'prefix' => $key['prefix'],
                     ]
                 );

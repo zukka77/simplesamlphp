@@ -351,7 +351,7 @@ class Module
             throw new \Exception("Invalid module.enable value for the '$module' module.");
         }
 
-        $core_module =  array_key_exists($module, self::$core_modules) ? true : false;
+        $core_module = array_key_exists($module, self::$core_modules) ? true : false;
 
         self::$module_info[$module]['enabled'] = $core_module ? true : false;
         return $core_module ? true : false;
@@ -424,10 +424,10 @@ class Module
             }
         } elseif (!in_array($tmp[0], self::getModules())) {
             // Module not installed
-            throw new \Exception('No module named \'' . $tmp[0]. '\' has been installed.');
+            throw new \Exception('No module named \'' . $tmp[0] . '\' has been installed.');
         } elseif (!self::isModuleEnabled($tmp[0])) {
             // Module installed, but not enabled
-            throw new \Exception('The module \'' . $tmp[0]. '\' is not enabled.');
+            throw new \Exception('The module \'' . $tmp[0] . '\' is not enabled.');
         } else {
             // should be a module
             // make sure empty types are handled correctly

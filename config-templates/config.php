@@ -3,6 +3,7 @@
 /**
  * The configuration of SimpleSAMLphp
  */
+
 $httpUtils = new \SimpleSAML\Utils\HTTP();
 
 $config = [
@@ -471,7 +472,7 @@ $config = [
      ***********/
 
     /*
-     * Configuration for enabling/disabling modules. By default the 'core' and 'saml' modules are enabled.
+     * Configuration for enabling/disabling modules. By default the 'core', 'admin' and 'saml' modules are enabled.
      *
      * Example:
      *
@@ -485,6 +486,7 @@ $config = [
      'module.enable' => [
          'exampleauth' => false,
          'core' => true,
+         'admin' => true,
          'saml' => true
      ],
 
@@ -733,41 +735,6 @@ $config = [
      *************************************/
 
     /*
-     * Language-related options.
-     */
-    'language' => [
-        /*
-         * An array in the form 'language' => <list of alternative languages>.
-         *
-         * Each key in the array is the ISO 639 two-letter code for a language,
-         * and its value is an array with a list of alternative languages that
-         * can be used if the given language is not available at some point.
-         * Each alternative language is also specified by its ISO 639 code.
-         *
-         * For example, for the "no" language code (Norwegian), we would have:
-         *
-         * 'priorities' => [
-         *      'no' => ['nb', 'nn', 'en', 'se'],
-         *      ...
-         * ],
-         *
-         * establishing that if a translation for the "no" language code is
-         * not available, we look for translations in "nb",
-         * and so on, in that order.
-         */
-        'priorities' => [
-            'no' => ['nb', 'nn', 'en', 'se'],
-            'nb' => ['no', 'nn', 'en', 'se'],
-            'nn' => ['no', 'nb', 'en', 'se'],
-            'se' => ['nb', 'no', 'nn', 'en'],
-            'nr' => ['zu', 'en'],
-            'nd' => ['zu', 'en'],
-            'tw' => ['st', 'en'],
-            'nso' => ['st', 'en'],
-        ],
-    ],
-
-    /*
      * Languages available, RTL languages, and what language is the default.
      */
     'language.available' => [
@@ -806,34 +773,6 @@ $config = [
      * Example:
      *   'language.get_language_function' => ['\SimpleSAML\Module\example\Template', 'getLanguage'],
      */
-
-    /*
-     * Extra dictionary for attribute names.
-     * This can be used to define local attributes.
-     *
-     * The format of the parameter is a string with <module>:<dictionary>.
-     *
-     * Specifying this option will cause us to look for modules/<module>/dictionaries/<dictionary>.definition.json
-     * The dictionary should look something like:
-     *
-     * {
-     *     "firstattribute": {
-     *         "en": "English name",
-     *         "no": "Norwegian name"
-     *     },
-     *     "secondattribute": {
-     *         "en": "English name",
-     *         "no": "Norwegian name"
-     *     }
-     * }
-     *
-     * Note that all attribute names in the dictionary must in lowercase.
-     *
-     * Example: 'attributes.extradictionary' => 'ourmodule:ourattributes',
-     */
-    'attributes.extradictionary' => null,
-
-
 
     /**************
      | APPEARANCE |

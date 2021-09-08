@@ -91,7 +91,7 @@ class Login
 
         $t = new Template($this->config, 'auth_status.twig', 'attributes');
         $l = $t->getLocalization();
-        $l->addDomain($l->getLocaleDir(), 'attributes');
+        $l->addAttributeDomains();
         $t->data['header'] = '{status:header_saml20_sp}';
         $t->data['attributes'] = $attributes;
         $t->data['nameid'] = !is_null($auth->getAuthData('saml:sp:NameID'))
@@ -186,10 +186,10 @@ class Login
 
         // we're not logged in, start auth
         $url = Module::getModuleURL('core/login/' . $as);
-        $params = array(
+        $params = [
             'ErrorURL' => $url,
             'ReturnTo' => $url,
-        );
+        ];
         return new RunnableResponse([$auth, 'login'], [$params]);
     }
 

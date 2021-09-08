@@ -17,13 +17,13 @@ use SimpleSAML\Utils;
  *
  * Example configuration:
  *
- * 91 => array(
+ * 91 => [
  *      'class' => 'saml:ExpectedAuthnContextClassRef',
- *      'accepted' => array(
+ *      'accepted' => [
  *         'urn:oasis:names:tc:SAML:2.0:post:ac:classes:nist-800-63:3',
  *         'urn:oasis:names:tc:SAML:2.0:ac:classes:Password',
- *         ),
- *       ),
+ *         ],
+ *       ],
  *
  * @package SimpleSAMLphp
  */
@@ -69,17 +69,16 @@ class ExpectedAuthnContextClassRef extends ProcessingFilter
 
 
     /**
-     *
-     * @param array &$request The current request
+     * @param array &$state The current request
      */
-    public function process(array &$request): void
+    public function process(array &$state): void
     {
-        Assert::keyExists($request, 'Attributes');
+        Assert::keyExists($state, 'Attributes');
 
-        $this->AuthnContextClassRef = $request['saml:sp:State']['saml:sp:AuthnContext'];
+        $this->AuthnContextClassRef = $state['saml:sp:State']['saml:sp:AuthnContext'];
 
         if (!in_array($this->AuthnContextClassRef, $this->accepted, true)) {
-            $this->unauthorized($request);
+            $this->unauthorized($state);
         }
     }
 
@@ -94,16 +93,16 @@ class ExpectedAuthnContextClassRef extends ProcessingFilter
      * thinking in case a "chained" ACL is needed, more complex
      * permission logic.
      *
-     * @param array $request
+     * @param array $state
      */
-    protected function unauthorized(array &$request): void
+    protected function unauthorized(array &$state): void
     {
         Logger::error(
             'ExpectedAuthnContextClassRef: Invalid authentication context: ' . strval($this->AuthnContextClassRef) .
             '. Accepted values are: ' . var_export($this->accepted, true)
         );
 
-        $id = Auth\State::saveState($request, 'saml:ExpectedAuthnContextClassRef:unauthorized');
+        $id = Auth\State::saveState($state, 'saml:ExpectedAuthnContextClassRef:unauthorized');
         $url = Module::getModuleURL(
             'saml/sp/wrong_authncontextclassref.php'
         );

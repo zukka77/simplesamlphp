@@ -83,46 +83,27 @@ Common options
 `logouttype`
 :   The logout handler to use. Either `iframe` or `traditional`. `traditional` is the default.
 
-`OrganizationName`
-:   The name of the organization responsible for this IdP.
-    This name does not need to be suitable for display to end users.
+`OrganizationName`, `OrganizationDisplayName`, `OrganizationURL`
+:   The name and URL of the organization responsible for this IdP.
+    You need to either specify _all three_ or none of these options.
+
+:   The Name does not need to be suitable for display to end users, the DisplayName should be.
+    The URL is a website the user can access for more information about the organization.
 
 :   This option can be translated into multiple languages by specifying the value as an array of language-code to translated name:
 
         'OrganizationName' => [
-            'en' => 'Example organization',
-            'no' => 'Eksempel organisation',
+            'en' => 'Voorbeeld Organisatie Foundation b.a.',
+            'nl' => 'Stichting Voorbeeld Organisatie b.a.',
         ],
-
-:   *Note*: If you specify this option, you must also specify the `OrganizationURL` option.
-
-`OrganizationDisplayName`
-:   The name of the organization responsible for this IdP.
-    This name must be suitable for display to end users.
-    If this option isn't specified, `OrganizationName` will be used instead.
-
-:   This option can be translated into multiple languages by specifying the value as an array of language-code to translated name.
-
-:   *Note*: If you specify this option, you must also specify the `OrganizationName` option.
-
-`OrganizationURL`
-:   A URL the end user can access for more information about the organization.
-
-:   This option can be translated into multiple languages by specifying the value as an array of language-code to translated URL.
-
-:   *Note*: If you specify this option, you must also specify the `OrganizationName` option.
-
-`privacypolicy`
-:   This is an absolute URL for where an user can find a
-    privacypolicy. If set, this will be shown on the consent page.
-    `%SPENTITYID%` in the URL will be replaced with the entity id of
-    the service the user is accessing.
-
-:   Note that this option also exists in the SP-remote metadata, and
-    any value in the SP-remote metadata overrides the one configured
-    in the IdP metadata.
-
-:   *Note*: **deprecated** Will be removed in a future release; use the MDUI-extension instead
+        'OrganizationDisplayName' => [
+            'en' => 'Example organization',
+            'nl' => 'Voorbeeldorganisatie',
+        ],
+        'OrganizationURL' => [
+            'en' => 'https://example.com',
+            'nl' => 'https://example.com/nl',
+        ],
 
 `privatekey`
 :   Name of private key file for this IdP, in PEM format. The filename
@@ -400,6 +381,10 @@ See the documentation for those extensions for more details:
   * [MDRPI extension](./simplesamlphp-metadata-extensions-rpi)
   * [EntityAttributes](./simplesamlphp-metadata-extensions-attributes)
 
+For other metadata extensions, you can use the `saml:Extensions` option:
+
+`saml:Extensions`
+:   An array of `\SAML2\XML\Chunk`s to include in the IdP metadata extensions, at the same level as `EntityAttributes`.
 
 Examples
 --------
@@ -430,3 +415,40 @@ These are some examples of IdP metadata
          */
         'auth' => 'example-userpass',
     ];
+
+### A custom metadata extension (eduGAIN republish request) ###
+
+```
+<?php
+
+$dom = \SAML2\DOMDocumentFactory::create();
+$republishRequest = $dom->createElementNS('http://eduid.cz/schema/metadata/1.0', 'eduidmd:RepublishRequest');
+$republishTarget = $dom->createElementNS('http://eduid.cz/schema/metadata/1.0', 'eduidmd:RepublishTarget', 'http://edugain.org/');
+$republishRequest->appendChild($republishTarget);
+$ext = [new \SAML2\XML\Chunk($republishRequest)];
+
+$metadata['__DYNAMIC:1__'] = [
+    'host' => '__DEFAULT__',
+    'certificate' => 'example.org.crt',
+    'privatekey' => 'example.org.pem',
+    'auth' => 'example-userpass',
+
+    /*
+     * The custom metadata extensions.
+     */
+    'saml:Extensions' => $ext,
+];
+```
+
+this generates the following metadata:
+
+```
+<EntityDescriptor entityID="...">
+  <Extensions xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <eduidmd:RepublishRequest xmlns:eduidmd="http://eduid.cz/schema/metadata/1.0">
+      <eduidmd:RepublishTarget>http://edugain.org/</eduidmd:RepublishTarget>
+    </eduidmd:RepublishRequest>
+  </Extensions>
+  <!-- rest of metadata -->
+</EntityDescriptor>
+```
