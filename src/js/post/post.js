@@ -1,7 +1,3 @@
-'use strict';
-
-import * as ready from './ready';
-
 /**
  * Automatically click the input button to redirect the user to
  * the SSO

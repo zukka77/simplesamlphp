@@ -1,8 +1,10 @@
 window.readyHandlers = [];
-window.ready = function ready(handler) {
+function ready(handler) {
     window.readyHandlers.push(handler);
     handleState();
 };
+
+window.ready = ready;
 
 window.handleState = function handleState () {
     if (document.readyState === 'interactive' || document.readyState === "complete") {
@@ -13,3 +15,5 @@ window.handleState = function handleState () {
 };
 
 document.onreadystatechange = window.handleState;
+
+export { ready };
