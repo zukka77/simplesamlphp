@@ -23,6 +23,9 @@
     <testsuite name="Unit tests">
       <directory>./modules/admin/tests</directory>
       <directory>./modules/core/tests</directory>
+      <directory>./modules/cron/tests</directory>
+      <directory>./modules/exampleauth/tests</directory>
+      <directory>./modules/multiauth/tests</directory>
       <directory>./tests</directory>
       <directory>./vendor/simplesamlphp/simplesamlphp-test-framework/src</directory>
     </testsuite>

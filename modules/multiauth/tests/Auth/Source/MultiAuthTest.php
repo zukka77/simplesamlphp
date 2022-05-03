@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\multiauth\Auth\Source;
+namespace SimpleSAML\Module\multiauth\Test\Auth\Source;
 
 use Error;
 use Exception;
