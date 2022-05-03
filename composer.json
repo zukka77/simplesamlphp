@@ -35,8 +35,8 @@
             "SimpleSAML\\Test\\": ["tests", "tests/lib/SimpleSAML"],
             "SimpleSAML\\Module\\admin\\Test\\": ["modules/admin/tests"],
             "SimpleSAML\\Module\\core\\Test\\": ["modules/core/tests"],
-            "SimpleSAML\\Test\\Module\\cron\\": ["tests/lib/SimpleSAML/modules/cron/lib"],
-            "SimpleSAML\\Test\\Module\\exampleauth\\": ["tests/lib/SimpleSAML/modules/exampleauth/lib"],
+            "SimpleSAML\\Test\\Module\\cron\\": ["modules/cron/tests"],
+            "SimpleSAML\\Test\\Module\\exampleauth\\": ["modules/exampleauth/tests"],
             "SimpleSAML\\Test\\Module\\multiauth\\": ["tests/lib/SimpleSAML/modules/multiauth/lib"],
             "SimpleSAML\\Test\\Module\\saml\\": ["tests/lib/SimpleSAML/modules/saml/lib"]
         }
