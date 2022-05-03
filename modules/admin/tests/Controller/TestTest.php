@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\admin\Controller;
+namespace SimpleSAML\Module\admin\Test\Controller;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\NameID;
