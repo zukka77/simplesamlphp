@@ -33,8 +33,8 @@
     "autoload-dev": {
         "psr-4": {
             "SimpleSAML\\Test\\": ["tests", "tests/lib/SimpleSAML"],
-            "SimpleSAML\\Module\\admin\\Test\\": ["modules/admin/tests/lib"],
-            "SimpleSAML\\Test\\Module\\core\\": ["tests/lib/SimpleSAML/modules/core/lib"],
+            "SimpleSAML\\Module\\admin\\Test\\": ["modules/admin/tests"],
+            "SimpleSAML\\Module\\core\\Test\\": ["modules/core/tests"],
             "SimpleSAML\\Test\\Module\\cron\\": ["tests/lib/SimpleSAML/modules/cron/lib"],
             "SimpleSAML\\Test\\Module\\exampleauth\\": ["tests/lib/SimpleSAML/modules/exampleauth/lib"],
             "SimpleSAML\\Test\\Module\\multiauth\\": ["tests/lib/SimpleSAML/modules/multiauth/lib"],

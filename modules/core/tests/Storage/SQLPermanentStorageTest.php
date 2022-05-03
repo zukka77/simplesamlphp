@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\core\Storage;
+namespace SimpleSAML\Module\core\Test\Storage;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;

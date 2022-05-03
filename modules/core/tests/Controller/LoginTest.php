@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\core\Controller;
+namespace SimpleSAML\Module\core\Test\Controller;
 
 use Exception;
 use ReflectionClass;

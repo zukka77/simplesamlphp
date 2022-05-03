@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\core\Auth\Process;
+namespace SimpleSAML\Module\core\Test\Auth\Process;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Utils;

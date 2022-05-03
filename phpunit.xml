@@ -21,9 +21,10 @@
   </coverage>
   <testsuites>
     <testsuite name="Unit tests">
-      <directory>./vendor/simplesamlphp/simplesamlphp-test-framework/src</directory>
-      <directory>./tests</directory>
       <directory>./modules/admin/tests</directory>
+      <directory>./modules/core/tests</directory>
+      <directory>./tests</directory>
+      <directory>./vendor/simplesamlphp/simplesamlphp-test-framework/src</directory>
     </testsuite>
   </testsuites>
   <logging/>
