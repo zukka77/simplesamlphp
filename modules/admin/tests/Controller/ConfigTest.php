@@ -38,27 +38,16 @@ class ConfigTest extends TestCase
     {
         parent::setUp();
 
-        $this->config = new class (
+        $this->config = Configuration::loadFromArray(
             [
                 'module.enable' => ['admin' => true],
                 'secretsalt' => 'defaultsecretsalt',
-                'admin.checkforupdates' => true
+                'admin.checkforupdates' => true,
             ],
-            '[ARRAY]'
-        ) extends Configuration
-        {
-            public function getVersion(): string
-            {
-                return '1.14.7';
-            }
-        };
-
-        // Dirty hack, but Session relies on config being actually loaded
-        $this->config::setPreloadedConfig(
-            Configuration::loadFromArray([], '[ARRAY]', 'simplesaml'),
-            'config.php',
+            '[ARRAY]',
             'simplesaml'
         );
+        Configuration::setPreLoadedConfig($this->config, 'config.php');
 
         $this->authUtils = new class () extends Utils\Auth {
             public function requireAdmin(): void
