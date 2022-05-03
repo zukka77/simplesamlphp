@@ -145,7 +145,8 @@ class Module
     public static function isModuleEnabled(string $module): bool
     {
         $config = Configuration::getOptionalConfig();
-        return self::isModuleEnabledWithConf($module, $config->getOptionalArray('module.enable', self::$core_modules));
+        $module_config = $config->getOptionalArray('module.enable', self::$core_modules);
+        return self::isModuleEnabledWithConf($module, $module_config);
     }
 
 

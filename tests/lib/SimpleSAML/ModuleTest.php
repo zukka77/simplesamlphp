@@ -16,6 +16,28 @@ use Symfony\Component\Filesystem\Path;
 class ModuleTest extends TestCase
 {
     /**
+     * Set up for each test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->config = Configuration::loadFromArray(
+            [
+                'module.enable' => [
+                    'core' => true,
+                    'cron' => true,
+                ],
+            ],
+            '[ARRAY]',
+            'simplesaml'
+        );
+
+        Configuration::setPreLoadedConfig($this->config, 'config.php');
+    }
+
+
+    /**
      * Test for SimpleSAML\Module::isModuleEnabled().
      */
     public function testIsModuleEnabled(): void
