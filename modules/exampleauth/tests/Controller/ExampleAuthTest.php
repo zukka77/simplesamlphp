@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\exampleauth\Controller;
+namespace SimpleSAML\Module\exampleauth\Test\Controller;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Auth;
