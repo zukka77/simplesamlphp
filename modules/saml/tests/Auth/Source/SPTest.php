@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\saml\Auth\Source;
+namespace SimpleSAML\Module\saml\Test\Auth\Source;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\saml\IdP;
+namespace SimpleSAML\Module\saml\Test\IdP;
 
 use InvalidArgumentException;
 use SAML2\XML\Chunk;

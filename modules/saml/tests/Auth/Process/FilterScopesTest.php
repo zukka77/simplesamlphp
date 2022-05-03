@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\saml\Auth\Process;
+namespace SimpleSAML\Module\saml\Tes\Auth\Process;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\saml\Auth\Process\FilterScopes;

@@ -26,6 +26,7 @@
       <directory>./modules/cron/tests</directory>
       <directory>./modules/exampleauth/tests</directory>
       <directory>./modules/multiauth/tests</directory>
+      <directory>./modules/saml/tests</directory>
       <directory>./tests</directory>
       <directory>./vendor/simplesamlphp/simplesamlphp-test-framework/src</directory>
     </testsuite>
