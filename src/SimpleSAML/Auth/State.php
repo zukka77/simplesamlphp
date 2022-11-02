@@ -171,6 +171,22 @@ class State
         return $id . ':' . $state[self::RESTART];
     }
 
+    /**
+     * Perform syntactic validation of an incoming state ID.
+     *
+     * @throws \Exception If the syntax of the supplied state ID is unexpected.
+     */
+    public static function validateStateId(string $stateId): void
+    {
+        $parts = explode(':', $stateId, 2);
+
+        if(!preg_match('/^_[0-9a-f]+$/', $parts[0])) {
+            throw new \Exception("Invalid AuthState ID syntax");
+        }
+        if(!empty($parts[1]) && filter_var($parts[1], FILTER_VALIDATE_URL) === false) {
+            throw new \Exception("Invalid AuthState return URL syntax");
+        }
+    }
 
     /**
      * Retrieve state timeout.
