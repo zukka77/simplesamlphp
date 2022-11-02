@@ -181,10 +181,10 @@ class State
         $parts = explode(':', $stateId, 2);
 
         if(!preg_match('/^_[0-9a-f]+$/', $parts[0])) {
-            throw new \Exception("Invalid AuthState ID syntax");
+            throw new \Exception("Invalid AuthState ID syntax: " . $parts[0]);
         }
         if(!empty($parts[1]) && filter_var($parts[1], FILTER_VALIDATE_URL) === false) {
-            throw new \Exception("Invalid AuthState return URL syntax");
+            throw new \Exception("Invalid AuthState return URL syntax: " . $parts[1]);
         }
     }
 
