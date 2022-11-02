@@ -85,7 +85,8 @@ class StateTest extends TestCase
         );
     }
 
-    function testValidateStateIdSimple()
+
+    public function testValidateStateIdSimple(): void
     {
         Auth\State::validateStateId('_aaabb');
         Auth\State::validateStateId('_aad12abb');
@@ -93,20 +94,23 @@ class StateTest extends TestCase
         $this->assertTrue(true);
     }
 
-    function testValidateStateIdWithReturnURL()
+
+    public function testValidateStateIdWithReturnURL(): void
     {
         Auth\State::validateStateId('_aaabb:https://loeki.tv/wp-login.php?example=testsomething&urn=urn:example:org');
         $this->assertTrue(true);
     }
 
-    function testValidateStateIdSimpleInvalid()
+
+    public function testValidateStateIdSimpleInvalid(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid AuthState ID syntax');
         Auth\State::validateStateId('aaabb');
     }
 
-    function testValidateStateIdWithReturnURLWhitespaceInvalid()
+
+    public function testValidateStateIdWithReturnURLWhitespaceInvalid(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid AuthState return URL syntax');
